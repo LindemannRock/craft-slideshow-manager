@@ -1,0 +1,59 @@
+{
+    "name": "lindemannrock/craft-slideshow-manager",
+    "description": "Comprehensive slideshow management field with Swiper.js integration for Craft CMS",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "slideshow",
+        "slider",
+        "carousel",
+        "swiper",
+        "content-slider",
+        "field"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bilal Hary Lindemann",
+            "email": "bh@lindemannrock.com",
+            "homepage": "https://lindemannrock.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@lindemannrock.com",
+        "issues": "https://github.com/LindemannRock/craft-slideshow-manager/issues",
+        "source": "https://github.com/LindemannRock/craft-slideshow-manager",
+        "docs": "https://github.com/LindemannRock/craft-slideshow-manager/blob/main/README.md",
+        "rss": "https://github.com/LindemannRock/craft-slideshow-manager/commits/main.atom"
+    },
+    "require": {
+        "php": "^8.2",
+        "craftcms/cms": "^5.0.0",
+        "lindemannrock/craft-logging-library": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/LindemannRock/craft-logging-library.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "lindemannrock\\slideshowmanager\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Slideshow Manager",
+        "handle": "slideshow-manager",
+        "developer": "LindemannRock",
+        "developerUrl": "https://lindemannrock.com",
+        "documentationUrl": "https://github.com/LindemannRock/craft-slideshow-manager/blob/main/README.md",
+        "changelogUrl": "https://github.com/LindemannRock/craft-slideshow-manager/blob/main/CHANGELOG.md",
+        "class": "lindemannrock\\slideshowmanager\\SlideshowManager"
+    }
+}

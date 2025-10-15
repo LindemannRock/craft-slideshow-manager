@@ -1,0 +1,122 @@
+{#
+ # Slideshow Manager Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'General Settings'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'general' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/general') }}
+        {{ hiddenInput('section', 'general') }}
+
+        <h2 style="margin-top: 0;">{{ 'Plugin Settings'|t('slideshow-manager') }}</h2>
+
+    {{ forms.textField({
+        label: 'Plugin name'|t('slideshow-manager'),
+        instructions: 'The public-facing name of the plugin'|t('slideshow-manager'),
+        id: 'pluginName',
+        name: 'settings[pluginName]',
+        value: settings.pluginName ?? 'Slideshow Manager',
+        placeholder: 'Slideshow Manager',
+        warning: settings.isOverridden('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverridden('pluginName'),
+        fieldAttributes: {
+            style: 'margin-top: 0;'
+        }
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Asset Loading'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Auto-load Swiper CSS'|t('slideshow-manager'),
+        instructions: 'Automatically load Swiper CSS on the frontend'|t('slideshow-manager'),
+        id: 'autoLoadSwiperCss',
+        name: 'settings[autoLoadSwiperCss]',
+        on: settings.autoLoadSwiperCss,
+        warning: settings.isOverridden('autoLoadSwiperCss') ? 'This is being overridden by the `autoLoadSwiperCss` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverridden('autoLoadSwiperCss')
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: 'Auto-load Swiper JS'|t('slideshow-manager'),
+        instructions: 'Automatically load Swiper JavaScript on the frontend'|t('slideshow-manager'),
+        id: 'autoLoadSwiperJs',
+        name: 'settings[autoLoadSwiperJs]',
+        on: settings.autoLoadSwiperJs,
+        warning: settings.isOverridden('autoLoadSwiperJs') ? 'This is being overridden by the `autoLoadSwiperJs` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverridden('autoLoadSwiperJs')
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Cache Settings'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Cache'|t('slideshow-manager'),
+        instructions: 'Whether to cache slideshow data for better performance.'|t('slideshow-manager'),
+        id: 'enableCache',
+        name: 'settings[enableCache]',
+        on: settings.enableCache,
+        warning: settings.isOverridden('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverridden('enableCache')
+    }) }}
+
+    {{ forms.textField({
+        label: 'Cache Duration'|t('slideshow-manager'),
+        instructions: 'How long to cache slideshow data, in seconds.'|t('slideshow-manager'),
+        id: 'cacheDuration',
+        name: 'settings[cacheDuration]',
+        value: settings.cacheDuration,
+        type: 'number',
+        min: 0,
+        warning: settings.isOverridden('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverridden('cacheDuration')
+    }) }}
+
+    <hr>
+
+    <h2>{{ "Logging Settings"|t('slideshow-manager') }}</h2>
+
+    {% set logLevelOptions = [
+        { label: 'Error (Critical errors only)', value: 'error' },
+        { label: 'Warning (Errors and warnings)', value: 'warning' },
+        { label: 'Info (General information)', value: 'info' },
+    ] %}
+
+    {% if craft.app.config.general.devMode %}
+        {% set logLevelOptions = logLevelOptions|merge([
+            { label: 'Debug (Detailed debugging)', value: 'debug' },
+        ]) %}
+    {% endif %}
+
+    {{ forms.selectField({
+        label: "Log Level"|t('slideshow-manager'),
+        instructions: craft.app.config.general.devMode ?
+            "Choose what types of messages to log. Higher levels include all lower levels (Error < Warning < Info < Debug)"|t('slideshow-manager') :
+            "Choose what types of messages to log. Debug level requires devMode to be enabled."|t('slideshow-manager'),
+        id: 'logLevel',
+        name: 'settings[logLevel]',
+        options: logLevelOptions,
+        value: settings.logLevel,
+        disabled: settings.isOverriddenByConfig('logLevel'),
+        warning: settings.isOverriddenByConfig('logLevel') ?
+            "This is being overridden by the <code>logLevel</code> setting in <code>config/slideshow-manager.php</code>."|raw : null,
+    }) }}
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}

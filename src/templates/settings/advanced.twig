@@ -1,0 +1,176 @@
+{#
+ # Slideshow Manager Advanced Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Advanced'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'advanced' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/advanced') }}
+        {{ hiddenInput('section', 'advanced') }}
+
+        <h2 style="margin-top: 0;">{{ 'Free Mode'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Free Mode'|t('slideshow-manager'),
+        instructions: 'Slides won\'t snap to positions (scrollable). <strong>Note:</strong> If using npm installation, requires: <code>import { FreeMode } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-freeMode-enabled',
+        name: 'settings[defaultSwiperConfig][freeMode][enabled]',
+        on: settings.defaultSwiperConfig.freeMode.enabled ?? false,
+        toggle: 'freeMode-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.freeMode.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.freeMode.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.freeMode.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="freeMode-options" class="{{ (settings.defaultSwiperConfig.freeMode.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.lightswitchField({
+            label: 'Sticky'|t('slideshow-manager'),
+            instructions: 'Snap to slides after release'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-freeMode-sticky',
+            name: 'settings[defaultSwiperConfig][freeMode][sticky]',
+            on: settings.defaultSwiperConfig.freeMode.sticky ?? false,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.freeMode.sticky'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.freeMode.sticky') ?
+                'This is being overridden by the <code>defaultSwiperConfig.freeMode.sticky</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Lazy Loading'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Lazy Loading'|t('slideshow-manager'),
+        instructions: 'Load images as they become visible'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-lazy-enabled',
+        name: 'settings[defaultSwiperConfig][lazy][enabled]',
+        on: settings.defaultSwiperConfig.lazy.enabled ?? false,
+        toggle: 'lazy-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.lazy.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.lazy.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.lazy.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="lazy-options" class="{{ (settings.defaultSwiperConfig.lazy.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Load Prev/Next'|t('slideshow-manager'),
+            instructions: 'Number of next/prev slides to preload'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-lazy-loadPrevNext',
+            name: 'settings[defaultSwiperConfig][lazy][loadPrevNext]',
+            value: settings.defaultSwiperConfig.lazy.loadPrevNext ?? 1,
+            type: 'number',
+            min: 0,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.lazy.loadPrevNext'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.lazy.loadPrevNext') ?
+                'This is being overridden by the <code>defaultSwiperConfig.lazy.loadPrevNext</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Parallax'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Parallax'|t('slideshow-manager'),
+        instructions: 'Enable parallax transition effects. <strong>Note:</strong> If using npm installation, requires: <code>import { Parallax } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-parallax-enabled',
+        name: 'settings[defaultSwiperConfig][parallax][enabled]',
+        on: settings.defaultSwiperConfig.parallax.enabled ?? false,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.parallax.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.parallax.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.parallax.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Zoom'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Zoom'|t('slideshow-manager'),
+        instructions: 'Allow pinch-to-zoom on slides. <strong>Note:</strong> If using npm installation, requires: <code>import { Zoom } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-zoom-enabled',
+        name: 'settings[defaultSwiperConfig][zoom][enabled]',
+        on: settings.defaultSwiperConfig.zoom.enabled ?? false,
+        toggle: 'zoom-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.zoom.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="zoom-options" class="{{ (settings.defaultSwiperConfig.zoom.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Max Ratio'|t('slideshow-manager'),
+            instructions: 'Maximum zoom ratio'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-zoom-maxRatio',
+            name: 'settings[defaultSwiperConfig][zoom][maxRatio]',
+            value: settings.defaultSwiperConfig.zoom.maxRatio ?? 3,
+            type: 'number',
+            min: 1,
+            step: 0.1,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.maxRatio'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.maxRatio') ?
+                'This is being overridden by the <code>defaultSwiperConfig.zoom.maxRatio</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.textField({
+            label: 'Min Ratio'|t('slideshow-manager'),
+            instructions: 'Minimum zoom ratio'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-zoom-minRatio',
+            name: 'settings[defaultSwiperConfig][zoom][minRatio]',
+            value: settings.defaultSwiperConfig.zoom.minRatio ?? 1,
+            type: 'number',
+            min: 1,
+            step: 0.1,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.minRatio'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.zoom.minRatio') ?
+                'This is being overridden by the <code>defaultSwiperConfig.zoom.minRatio</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Virtual Slides'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Virtual Slides'|t('slideshow-manager'),
+        instructions: 'Render only visible slides for better performance with many slides. <strong>Note:</strong> If using npm installation, requires: <code>import { Virtual } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-virtual-enabled',
+        name: 'settings[defaultSwiperConfig][virtual][enabled]',
+        on: settings.defaultSwiperConfig.virtual.enabled ?? false,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.virtual.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.virtual.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.virtual.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Accessibility'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable A11y'|t('slideshow-manager'),
+        instructions: 'Enable accessibility features (screen readers, keyboard nav). <strong>Note:</strong> If using npm installation, requires: <code>import { A11y } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-a11y-enabled',
+        name: 'settings[defaultSwiperConfig][a11y][enabled]',
+        on: settings.defaultSwiperConfig.a11y.enabled ?? true,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.a11y.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.a11y.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.a11y.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "_layouts/cp" %}
+
+{% set title = title ?? 'Settings'|t('slideshow-manager') %}
+{% set selectedSettingsItem = selectedSettingsItem ?? 'general' %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% block sidebar %}
+    <nav id="settings-nav">
+        <ul>
+            <li>
+                <a href="{{ url('slideshow-manager/settings/general') }}" {% if selectedSettingsItem == 'general' %}class="sel"{% endif %} data-nav-item="general">
+                    {{ 'General'|t('slideshow-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('slideshow-manager/settings/basic') }}" {% if selectedSettingsItem == 'basic' %}class="sel"{% endif %} data-nav-item="basic">
+                    {{ 'Basic Settings'|t('slideshow-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('slideshow-manager/settings/layout') }}" {% if selectedSettingsItem == 'layout' %}class="sel"{% endif %} data-nav-item="layout">
+                    {{ 'Layout & Responsive'|t('slideshow-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('slideshow-manager/settings/controls') }}" {% if selectedSettingsItem == 'controls' %}class="sel"{% endif %} data-nav-item="controls">
+                    {{ 'Controls'|t('slideshow-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('slideshow-manager/settings/advanced') }}" {% if selectedSettingsItem == 'advanced' %}class="sel"{% endif %} data-nav-item="advanced">
+                    {{ 'Advanced'|t('slideshow-manager') }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% css %}
+    /* Prevent scroll-based highlighting */
+    #settings-nav a {
+        transition: none;
+    }
+
+    /* Ensure only the current page link is highlighted */
+    #settings-nav a.sel {
+        cursor: default;
+    }
+{% endcss %}

@@ -1,0 +1,68 @@
+{#
+ # Slideshow Field Settings Template
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% import "_includes/forms" as forms %}
+
+{# Include parent Matrix field settings #}
+{{ matrixSettingsHtml|raw }}
+
+<hr>
+
+<h2>{{ 'Swiper Configuration'|t('slideshow-manager') }}</h2>
+<p class="light">{{ 'Configure default Swiper settings for this slideshow. Leave empty to use global defaults.'|t('slideshow-manager') }}</p>
+
+{{ forms.lightswitchField({
+    label: 'Navigation'|t('slideshow-manager'),
+    instructions: 'Show navigation arrows'|t('slideshow-manager'),
+    name: 'swiperConfig[navigation]',
+    on: field.swiperConfig.navigation ?? null,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Pagination'|t('slideshow-manager'),
+    instructions: 'Show pagination dots'|t('slideshow-manager'),
+    name: 'swiperConfig[pagination][enabled]',
+    on: field.swiperConfig.pagination.enabled ?? null,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Autoplay'|t('slideshow-manager'),
+    instructions: 'Enable autoplay'|t('slideshow-manager'),
+    name: 'swiperConfig[autoplay][enabled]',
+    on: field.swiperConfig.autoplay.enabled ?? null,
+}) }}
+
+{{ forms.textField({
+    label: 'Autoplay Delay (ms)'|t('slideshow-manager'),
+    name: 'swiperConfig[autoplay][delay]',
+    value: field.swiperConfig.autoplay.delay ?? 3000,
+    type: 'number',
+    min: 1000,
+    placeholder: '3000',
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Loop'|t('slideshow-manager'),
+    instructions: 'Enable continuous loop mode'|t('slideshow-manager'),
+    name: 'swiperConfig[loop]',
+    on: field.swiperConfig.loop ?? null,
+}) }}
+
+{{ forms.selectField({
+    label: 'Effect'|t('slideshow-manager'),
+    instructions: 'Transition effect (Default uses global settings)'|t('slideshow-manager'),
+    name: 'swiperConfig[effect]',
+    value: field.swiperConfig.effect ?? '',
+    options: [
+        { label: 'Use Global Default', value: '' },
+        { label: 'Slide', value: 'slide' },
+        { label: 'Fade', value: 'fade' },
+        { label: 'Cube', value: 'cube' },
+        { label: 'Coverflow', value: 'coverflow' },
+        { label: 'Flip', value: 'flip' },
+    ],
+}) }}

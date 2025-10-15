@@ -1,0 +1,141 @@
+{#
+ # Slideshow Manager Controls Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Controls'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'controls' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/controls') }}
+        {{ hiddenInput('section', 'controls') }}
+
+        <h2 style="margin-top: 0;">{{ 'Keyboard Control'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Keyboard'|t('slideshow-manager'),
+        instructions: 'Navigate with keyboard arrows. <strong>Note:</strong> If using npm installation, requires: <code>import { Keyboard } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-keyboard-enabled',
+        name: 'settings[defaultSwiperConfig][keyboard][enabled]',
+        on: settings.defaultSwiperConfig.keyboard.enabled ?? true,
+        toggle: 'keyboard-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.keyboard.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.keyboard.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.keyboard.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="keyboard-options" class="{{ (settings.defaultSwiperConfig.keyboard.enabled ?? true) ? '' : 'hidden' }}">
+        {{ forms.lightswitchField({
+            label: 'Only in Viewport'|t('slideshow-manager'),
+            instructions: 'Only activate keyboard when slider is in viewport'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-keyboard-onlyInViewport',
+            name: 'settings[defaultSwiperConfig][keyboard][onlyInViewport]',
+            on: settings.defaultSwiperConfig.keyboard.onlyInViewport ?? true,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.keyboard.onlyInViewport'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.keyboard.onlyInViewport') ?
+                'This is being overridden by the <code>defaultSwiperConfig.keyboard.onlyInViewport</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Mousewheel Control'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Mousewheel'|t('slideshow-manager'),
+        instructions: 'Navigate with mouse wheel. <strong>Note:</strong> If using npm installation, requires: <code>import { Mousewheel } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-mousewheel-enabled',
+        name: 'settings[defaultSwiperConfig][mousewheel][enabled]',
+        on: settings.defaultSwiperConfig.mousewheel.enabled ?? false,
+        toggle: 'mousewheel-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.mousewheel.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.mousewheel.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.mousewheel.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="mousewheel-options" class="{{ (settings.defaultSwiperConfig.mousewheel.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.lightswitchField({
+            label: 'Force to Axis'|t('slideshow-manager'),
+            instructions: 'Force mousewheel to navigate on slider axis only'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-mousewheel-forceToAxis',
+            name: 'settings[defaultSwiperConfig][mousewheel][forceToAxis]',
+            on: settings.defaultSwiperConfig.mousewheel.forceToAxis ?? true,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.mousewheel.forceToAxis'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.mousewheel.forceToAxis') ?
+                'This is being overridden by the <code>defaultSwiperConfig.mousewheel.forceToAxis</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Scrollbar'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Scrollbar'|t('slideshow-manager'),
+        instructions: 'Display scrollbar for dragging. <strong>Note:</strong> If using npm installation, requires: <code>import { Scrollbar } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-scrollbar-enabled',
+        name: 'settings[defaultSwiperConfig][scrollbar][enabled]',
+        on: settings.defaultSwiperConfig.scrollbar.enabled ?? false,
+        toggle: 'scrollbar-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.scrollbar.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.scrollbar.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.scrollbar.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="scrollbar-options" class="{{ (settings.defaultSwiperConfig.scrollbar.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.lightswitchField({
+            label: 'Draggable Scrollbar'|t('slideshow-manager'),
+            instructions: 'Allow scrollbar dragging'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-scrollbar-draggable',
+            name: 'settings[defaultSwiperConfig][scrollbar][draggable]',
+            on: settings.defaultSwiperConfig.scrollbar.draggable ?? true,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.scrollbar.draggable'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.scrollbar.draggable') ?
+                'This is being overridden by the <code>defaultSwiperConfig.scrollbar.draggable</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Hash Navigation'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Hash Navigation'|t('slideshow-manager'),
+        instructions: 'Update URL hash when slide changes. <strong>Note:</strong> If using npm installation, requires: <code>import { HashNavigation } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-hashNavigation-enabled',
+        name: 'settings[defaultSwiperConfig][hashNavigation][enabled]',
+        on: settings.defaultSwiperConfig.hashNavigation.enabled ?? false,
+        toggle: 'hashNavigation-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.hashNavigation.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.hashNavigation.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.hashNavigation.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="hashNavigation-options" class="{{ (settings.defaultSwiperConfig.hashNavigation.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.lightswitchField({
+            label: 'Watch State'|t('slideshow-manager'),
+            instructions: 'Enable hash state watching'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-hashNavigation-watchState',
+            name: 'settings[defaultSwiperConfig][hashNavigation][watchState]',
+            on: settings.defaultSwiperConfig.hashNavigation.watchState ?? false,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.hashNavigation.watchState'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.hashNavigation.watchState') ?
+                'This is being overridden by the <code>defaultSwiperConfig.hashNavigation.watchState</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}

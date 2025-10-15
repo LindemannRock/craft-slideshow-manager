@@ -1,0 +1,454 @@
+{#
+ # Slideshow Config Field Input
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% import "_includes/forms" as forms %}
+
+{% set config = value ?? defaultConfig %}
+
+{% namespace namespace %}
+<div class="slideshow-config-field">
+    <h3 style="margin-top: 0;">{{ 'Navigation'|t('slideshow-manager') }}</h3>
+
+    {{ forms.lightswitchField({
+        label: 'Show Navigation Arrows'|t('slideshow-manager'),
+        name: 'navigation',
+        on: config.navigation ?? true,
+        toggle: 'navigation-visibility-' ~ field.id,
+    }) }}
+
+    <div id="navigation-visibility-{{ field.id }}" class="{{ (config.navigation ?? true) ? '' : 'hidden' }}">
+        {{ forms.selectField({
+            label: 'Navigation Visibility'|t('slideshow-manager'),
+            name: 'navigationVisibility',
+            value: config.navigationVisibility ?? 'default',
+            options: [
+                { label: 'Always Visible', value: 'default' },
+                { label: 'Hide on Mobile', value: 'hide-mobile' },
+                { label: 'Hide on Desktop', value: 'hide-desktop' },
+                { label: 'Mobile Only', value: 'mobile-only' },
+                { label: 'Desktop Only', value: 'desktop-only' },
+            ],
+        }) }}
+    </div>
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Pagination'|t('slideshow-manager') }}</h3>
+
+    {{ forms.lightswitchField({
+        label: 'Show Pagination'|t('slideshow-manager'),
+        name: 'paginationEnabled',
+        on: config.paginationEnabled ?? true,
+        toggle: 'pagination-visibility-' ~ field.id,
+    }) }}
+
+    <div id="pagination-visibility-{{ field.id }}" class="{{ (config.paginationEnabled ?? true) ? '' : 'hidden' }}">
+        {{ forms.selectField({
+            label: 'Pagination Type'|t('slideshow-manager'),
+            name: 'paginationType',
+            value: config.paginationType ?? 'bullets',
+            options: [
+                { label: 'Bullets', value: 'bullets' },
+                { label: 'Fraction', value: 'fraction' },
+                { label: 'Progressbar', value: 'progressbar' },
+            ],
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Clickable Pagination'|t('slideshow-manager'),
+            instructions: 'Allow clicking pagination to navigate'|t('slideshow-manager'),
+            name: 'paginationClickable',
+            on: config.paginationClickable ?? true,
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Pagination Visibility'|t('slideshow-manager'),
+            name: 'paginationVisibility',
+            value: config.paginationVisibility ?? 'default',
+            options: [
+                { label: 'Always Visible', value: 'default' },
+                { label: 'Hide on Mobile', value: 'hide-mobile' },
+                { label: 'Hide on Desktop', value: 'hide-desktop' },
+                { label: 'Mobile Only', value: 'mobile-only' },
+                { label: 'Desktop Only', value: 'desktop-only' },
+            ],
+        }) }}
+    </div>
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Autoplay'|t('slideshow-manager') }}</h3>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Autoplay'|t('slideshow-manager'),
+        instructions: 'Auto-advance slides'|t('slideshow-manager'),
+        name: 'autoplayEnabled',
+        on: config.autoplayEnabled ?? false,
+        toggle: 'autoplay-options-' ~ field.id,
+    }) }}
+
+    <div id="autoplay-options-{{ field.id }}" class="{{ (config.autoplayEnabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Autoplay Delay (ms)'|t('slideshow-manager'),
+            instructions: 'Delay between transitions in milliseconds'|t('slideshow-manager'),
+            name: 'autoplayDelay',
+            value: config.autoplayDelay ?? 3000,
+            type: 'number',
+            min: 1000,
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Disable on Interaction'|t('slideshow-manager'),
+            instructions: 'Stop autoplay when user interacts'|t('slideshow-manager'),
+            name: 'autoplayDisableOnInteraction',
+            on: config.autoplayDisableOnInteraction ?? false,
+        }) }}
+    </div>
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Behavior'|t('slideshow-manager') }}</h3>
+
+    {{ forms.selectField({
+        label: 'Effect'|t('slideshow-manager'),
+        instructions: 'Transition effect'|t('slideshow-manager'),
+        name: 'effect',
+        value: config.effect ?? 'slide',
+        options: [
+            { label: 'Slide', value: 'slide' },
+            { label: 'Fade', value: 'fade' },
+            { label: 'Cube', value: 'cube' },
+            { label: 'Coverflow', value: 'coverflow' },
+            { label: 'Flip', value: 'flip' },
+            { label: 'Cards', value: 'cards' },
+            { label: 'Creative', value: 'creative' },
+        ],
+    }) }}
+
+    {{ forms.textField({
+        label: 'Speed (ms)'|t('slideshow-manager'),
+        instructions: 'Transition speed between slides'|t('slideshow-manager'),
+        name: 'speed',
+        value: config.speed ?? 300,
+        type: 'number',
+        min: 0,
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: 'Loop'|t('slideshow-manager'),
+        instructions: 'Continuous loop mode'|t('slideshow-manager'),
+        name: 'loop',
+        on: config.loop ?? true,
+    }) }}
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Slides Display'|t('slideshow-manager') }}</h3>
+
+    {{ forms.textField({
+        label: 'Slides Per View'|t('slideshow-manager'),
+        instructions: 'Number of slides per view (supports decimal for partial slides)'|t('slideshow-manager'),
+        name: 'slidesPerView',
+        value: config.slidesPerView ?? 1,
+        type: 'number',
+        min: 1,
+        step: 0.1,
+    }) }}
+
+    {{ forms.textField({
+        label: 'Space Between (px)'|t('slideshow-manager'),
+        instructions: 'Distance between slides in pixels'|t('slideshow-manager'),
+        name: 'spaceBetween',
+        value: config.spaceBetween ?? 0,
+        type: 'number',
+        min: 0,
+    }) }}
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Layout Options'|t('slideshow-manager') }}</h3>
+
+    {{ forms.lightswitchField({
+        label: 'Centered Slides'|t('slideshow-manager'),
+        instructions: 'Center the active slide instead of aligning to the left'|t('slideshow-manager'),
+        name: 'centeredSlides',
+        on: config.centeredSlides ?? false,
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: 'Enable Grid'|t('slideshow-manager'),
+        instructions: 'Display slides in a grid layout'|t('slideshow-manager'),
+        name: 'gridEnabled',
+        on: config.gridEnabled ?? false,
+        toggle: 'grid-options-' ~ field.id,
+    }) }}
+
+    <div id="grid-options-{{ field.id }}" class="{{ (config.gridEnabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Grid Rows'|t('slideshow-manager'),
+            instructions: 'Number of rows per slide group'|t('slideshow-manager'),
+            name: 'gridRows',
+            value: config.gridRows ?? 1,
+            type: 'number',
+            min: 1,
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Grid Fill'|t('slideshow-manager'),
+            name: 'gridFill',
+            value: config.gridFill ?? 'row',
+            options: [
+                { label: 'Row', value: 'row' },
+                { label: 'Column', value: 'column' },
+            ],
+        }) }}
+    </div>
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Responsive Breakpoints'|t('slideshow-manager') }}</h3>
+    <p class="light">{{ 'Define how many slides to show at different screen widths.'|t('slideshow-manager') }}</p>
+
+    <style>
+        .slideshow-config-field {
+            container-type: inline-size;
+        }
+        .breakpoint-row-{{ field.id }} {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+        }
+        .breakpoint-fields-{{ field.id }} {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: end;
+        }
+        .breakpoint-fields-{{ field.id }} > .field {
+            margin-block: 0 !important;
+        }
+        .breakpoint-fields-{{ field.id }} input {
+            width: 100%;
+        }
+        .breakpoint-delete-{{ field.id }} {
+            display: flex;
+            align-items: flex-end;
+        }
+        .breakpoint-delete-{{ field.id }} .btn {
+            width: 100%;
+        }
+        @container (min-width: 900px) {
+            .breakpoint-fields-{{ field.id }} {
+                grid-template-columns: 1fr 1fr 1fr auto;
+            }
+            .breakpoint-delete-{{ field.id }} .btn {
+                width: auto;
+                min-width: 80px;
+            }
+        }
+    </style>
+
+    <div id="breakpoints-container-{{ field.id }}" class="breakpoints-repeater" data-field-id="{{ field.id }}">
+        {% set breakpoints = config.breakpoints ?? defaultConfig.breakpoints ?? [] %}
+
+        {% for breakpoint in breakpoints %}
+            <div class="breakpoint-row breakpoint-row-{{ field.id }}" data-index="{{ loop.index0 }}">
+                <div class="breakpoint-fields breakpoint-fields-{{ field.id }}">
+                    {{ forms.textField({
+                        label: 'Min Width (px)'|t('slideshow-manager'),
+                        name: 'breakpoints[' ~ loop.index0 ~ '][width]',
+                        value: breakpoint.width ?? 0,
+                        type: 'number',
+                        min: 0,
+                        size: 8,
+                    }) }}
+
+                    {{ forms.textField({
+                        label: 'Slides Per View'|t('slideshow-manager'),
+                        name: 'breakpoints[' ~ loop.index0 ~ '][slidesPerView]',
+                        value: breakpoint.slidesPerView ?? 1,
+                        type: 'number',
+                        min: 1,
+                        step: 0.1,
+                        size: 8,
+                    }) }}
+
+                    {{ forms.textField({
+                        label: 'Space Between (px)'|t('slideshow-manager'),
+                        name: 'breakpoints[' ~ loop.index0 ~ '][spaceBetween]',
+                        value: breakpoint.spaceBetween ?? 0,
+                        type: 'number',
+                        min: 0,
+                        size: 8,
+                    }) }}
+
+                    <div class="breakpoint-delete-{{ field.id }}">
+                        <button type="button" class="btn delete-breakpoint-{{ field.id }}" title="{{ 'Delete breakpoint'|t('slideshow-manager') }}">
+                            {{ 'Delete'|t('slideshow-manager') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="display: flex; gap: 0.5rem;">
+        <button type="button" class="btn add icon add-breakpoint-{{ field.id }}" data-field-id="{{ field.id }}">
+            {{ 'Add Breakpoint'|t('slideshow-manager') }}
+        </button>
+        <button type="button" class="btn restore-defaults-{{ field.id }}" data-field-id="{{ field.id }}">
+            {{ 'Restore Defaults'|t('slideshow-manager') }}
+        </button>
+    </div>
+</div>
+{% endnamespace %}
+
+{% js %}
+(function() {
+    const fieldId = '{{ field.id }}';
+    const listenerKey = 'slideshowField_' + fieldId;
+
+    // Only attach event listener once per field
+    if (window[listenerKey]) {
+        return;
+    }
+    window[listenerKey] = true;
+
+    // Use event delegation on document to handle buttons even after Live Preview re-renders
+    document.addEventListener('click', function(e) {
+        // Add breakpoint
+        const addBtn = e.target.closest('.add-breakpoint-' + fieldId);
+        if (addBtn) {
+            e.preventDefault();
+            // Find the container closest to the button (handles Live Preview)
+            const container = addBtn.closest('.slideshow-config-field').querySelector('.breakpoints-repeater[data-field-id="' + fieldId + '"]');
+            if (!container) return;
+
+            let breakpointIndex = container.querySelectorAll('.breakpoint-row').length;
+
+            // Get the namespace from an existing input
+            let fieldNamespace = '{{ namespace|e('js') }}';
+            const firstInput = container.querySelector('input[name*="breakpoints"]');
+            if (firstInput) {
+                const match = firstInput.name.match(/^(.+?)\[breakpoints\]/);
+                if (match) {
+                    fieldNamespace = match[1];
+                }
+            }
+            const template = `
+                <div class="breakpoint-row breakpoint-row-${fieldId}" data-index="${breakpointIndex}">
+                    <div class="breakpoint-fields breakpoint-fields-${fieldId}">
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Min Width (px)'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][width]" value="0" min="0" size="8" class="text"></div>
+                        </div>
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Slides Per View'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][slidesPerView]" value="1" min="1" step="0.1" size="8" class="text"></div>
+                        </div>
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Space Between (px)'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][spaceBetween]" value="0" min="0" size="8" class="text"></div>
+                        </div>
+                        <div class="breakpoint-delete-${fieldId}">
+                            <button type="button" class="btn delete-breakpoint-${fieldId}">{{ 'Delete'|t('slideshow-manager') }}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', template);
+        }
+
+        // Delete breakpoint
+        const deleteBtn = e.target.closest('.delete-breakpoint-' + fieldId);
+        if (deleteBtn) {
+            e.preventDefault();
+            const container = deleteBtn.closest('.slideshow-config-field').querySelector('.breakpoints-repeater[data-field-id="' + fieldId + '"]');
+            if (!container) return;
+
+            deleteBtn.closest('.breakpoint-row').remove();
+
+            // Reindex remaining breakpoints so there are no gaps
+            const rows = container.querySelectorAll('.breakpoint-row');
+            rows.forEach(function(row, index) {
+                row.setAttribute('data-index', index);
+                // Update input names to use sequential indexes
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(function(input) {
+                    const name = input.getAttribute('name');
+                    // Replace [breakpoints][OLD_INDEX] with [breakpoints][NEW_INDEX]
+                    const newName = name.replace(/\[breakpoints\]\[\d+\]/, '[breakpoints][' + index + ']');
+                    input.setAttribute('name', newName);
+                });
+            });
+        }
+
+        // Restore defaults
+        const restoreBtn = e.target.closest('.restore-defaults-' + fieldId);
+        if (restoreBtn) {
+            e.preventDefault();
+            const container = restoreBtn.closest('.slideshow-config-field').querySelector('.breakpoints-repeater[data-field-id="' + fieldId + '"]');
+
+            if (!container) {
+                return;
+            }
+
+            if (!confirm('{{ 'This will replace all existing breakpoints with defaults (0px, 640px, 768px, 1024px). Continue?'|t('slideshow-manager') }}')) {
+                return;
+            }
+
+            // Get the namespace from an existing input
+            let fieldNamespace = '{{ namespace|e('js') }}';
+            const firstInput = container.querySelector('input[name*="breakpoints"]');
+            if (firstInput) {
+                const match = firstInput.name.match(/^(.+?)\[breakpoints\]/);
+                if (match) {
+                    fieldNamespace = match[1];
+                }
+            }
+
+            container.innerHTML = '';
+
+            const defaults = [
+                { width: 0, slidesPerView: 1, spaceBetween: 0 },
+                { width: 640, slidesPerView: 1, spaceBetween: 10 },
+                { width: 768, slidesPerView: 2, spaceBetween: 20 },
+                { width: 1024, slidesPerView: 3, spaceBetween: 30 }
+            ];
+
+            let breakpointIndex = 0;
+            defaults.forEach(function(bp) {
+                const template = `
+                    <div class="breakpoint-row breakpoint-row-${fieldId}" data-index="${breakpointIndex}">
+                        <div class="breakpoint-fields breakpoint-fields-${fieldId}">
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Min Width (px)'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][width]" value="${bp.width}" min="0" size="8" class="text"></div>
+                            </div>
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Slides Per View'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][slidesPerView]" value="${bp.slidesPerView}" min="1" step="0.1" size="8" class="text"></div>
+                            </div>
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Space Between (px)'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="${fieldNamespace}[breakpoints][${breakpointIndex}][spaceBetween]" value="${bp.spaceBetween}" min="0" size="8" class="text"></div>
+                            </div>
+                            <div class="breakpoint-delete-${fieldId}">
+                                <button type="button" class="btn delete-breakpoint-${fieldId}">{{ 'Delete'|t('slideshow-manager') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', template);
+                breakpointIndex++;
+            });
+        }
+    });
+})();
+{% endjs %}

@@ -1,0 +1,25 @@
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = 'Field Layout'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'field-layout' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    {{ actionInput('slideshow-manager/settings/save-field-layout') }}
+    {{ redirectInput('slideshow-manager/settings/field-layout') }}
+
+    <div class="field">
+        <p class="readable">
+            {{ 'Add custom fields to Slide elements. Any fields you add here will appear when editing slides in a slideshow.'|t('slideshow-manager') }}
+        </p>
+    </div>
+
+    {% if fieldLayout is defined and fieldLayout %}
+        {{ forms.fieldLayoutDesignerField({
+            fieldLayout: fieldLayout,
+        }) }}
+    {% else %}
+        <p class="notice">{{ 'No field layout available.'|t('slideshow-manager') }}</p>
+    {% endif %}
+{% endblock %}

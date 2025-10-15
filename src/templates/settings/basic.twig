@@ -1,0 +1,227 @@
+{#
+ # Slideshow Manager Basic Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Basic Settings'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'basic' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/basic') }}
+        {{ hiddenInput('section', 'basic') }}
+
+        <p class="light" style="margin-top: 0;">{{ 'These defaults will be used for all new slideshow fields. They can be overridden per-entry or in templates.'|t('slideshow-manager') }}</p>
+
+    <hr>
+
+    <h2 style="margin-top: 1rem;">{{ 'Navigation'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Show Navigation Arrows'|t('slideshow-manager'),
+        instructions: 'Display previous/next arrows. <strong>Note:</strong> If using npm installation, requires: <code>import { Navigation } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-navigation',
+        name: 'settings[defaultSwiperConfig][navigation]',
+        on: settings.defaultSwiperConfig.navigation ?? true,
+        toggle: 'navigation-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.navigation'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.navigation') ?
+            'This is being overridden by the <code>defaultSwiperConfig.navigation</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="navigation-options" class="{{ (settings.defaultSwiperConfig.navigation ?? true) ? '' : 'hidden' }}">
+        {{ forms.selectField({
+            label: 'Navigation Visibility'|t('slideshow-manager'),
+            instructions: 'Control when navigation arrows are visible'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-navigationVisibility',
+            name: 'settings[defaultSwiperConfig][navigationVisibility]',
+            value: settings.defaultSwiperConfig.navigationVisibility ?? 'default',
+            options: [
+                { label: 'Always Visible', value: 'default' },
+                { label: 'Hide on Mobile', value: 'hide-mobile' },
+                { label: 'Hide on Desktop', value: 'hide-desktop' },
+                { label: 'Mobile Only', value: 'mobile-only' },
+                { label: 'Desktop Only', value: 'desktop-only' },
+            ],
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.navigationVisibility'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.navigationVisibility') ?
+                'This is being overridden by the <code>defaultSwiperConfig.navigationVisibility</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Pagination'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Show Pagination'|t('slideshow-manager'),
+        instructions: 'Display pagination dots/bullets. <strong>Note:</strong> If using npm installation, requires: <code>import { Pagination } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-pagination-enabled',
+        name: 'settings[defaultSwiperConfig][pagination][enabled]',
+        on: settings.defaultSwiperConfig.pagination.enabled ?? true,
+        toggle: 'pagination-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.pagination.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="pagination-options" class="{{ (settings.defaultSwiperConfig.pagination.enabled ?? true) ? '' : 'hidden' }}">
+        {{ forms.selectField({
+            label: 'Pagination Type'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-pagination-type',
+            name: 'settings[defaultSwiperConfig][pagination][type]',
+            value: settings.defaultSwiperConfig.pagination.type ?? 'bullets',
+            options: [
+                { label: 'Bullets', value: 'bullets' },
+                { label: 'Fraction', value: 'fraction' },
+                { label: 'Progressbar', value: 'progressbar' },
+            ],
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.type'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.type') ?
+                'This is being overridden by the <code>defaultSwiperConfig.pagination.type</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Clickable Pagination'|t('slideshow-manager'),
+            instructions: 'Allow clicking pagination to navigate'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-pagination-clickable',
+            name: 'settings[defaultSwiperConfig][pagination][clickable]',
+            on: settings.defaultSwiperConfig.pagination.clickable ?? true,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.clickable'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.clickable') ?
+                'This is being overridden by the <code>defaultSwiperConfig.pagination.clickable</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Pagination Visibility'|t('slideshow-manager'),
+            instructions: 'Control when pagination is visible'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-paginationVisibility',
+            name: 'settings[defaultSwiperConfig][paginationVisibility]',
+            value: settings.defaultSwiperConfig.paginationVisibility ?? 'default',
+            options: [
+                { label: 'Always Visible', value: 'default' },
+                { label: 'Hide on Mobile', value: 'hide-mobile' },
+                { label: 'Hide on Desktop', value: 'hide-desktop' },
+                { label: 'Mobile Only', value: 'mobile-only' },
+                { label: 'Desktop Only', value: 'desktop-only' },
+            ],
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.paginationVisibility'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.paginationVisibility') ?
+                'This is being overridden by the <code>defaultSwiperConfig.paginationVisibility</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Autoplay'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Autoplay'|t('slideshow-manager'),
+        instructions: 'Automatically advance slides. <strong>Note:</strong> If using npm installation, requires: <code>import { Autoplay } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-autoplay-enabled',
+        name: 'settings[defaultSwiperConfig][autoplay][enabled]',
+        on: settings.defaultSwiperConfig.autoplay.enabled ?? false,
+        toggle: 'autoplay-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.autoplay.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="autoplay-options" class="{{ (settings.defaultSwiperConfig.autoplay.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Autoplay Delay (ms)'|t('slideshow-manager'),
+            instructions: 'Delay between transitions in milliseconds'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-autoplay-delay',
+            name: 'settings[defaultSwiperConfig][autoplay][delay]',
+            value: settings.defaultSwiperConfig.autoplay.delay ?? 3000,
+            type: 'number',
+            min: 1000,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.delay'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.delay') ?
+                'This is being overridden by the <code>defaultSwiperConfig.autoplay.delay</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Disable on Interaction'|t('slideshow-manager'),
+            instructions: 'Stop autoplay when user interacts with slider'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-autoplay-disableOnInteraction',
+            name: 'settings[defaultSwiperConfig][autoplay][disableOnInteraction]',
+            on: settings.defaultSwiperConfig.autoplay.disableOnInteraction ?? false,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.disableOnInteraction'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.autoplay.disableOnInteraction') ?
+                'This is being overridden by the <code>defaultSwiperConfig.autoplay.disableOnInteraction</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Behavior'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Loop'|t('slideshow-manager'),
+        instructions: 'Enable continuous loop mode'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-loop',
+        name: 'settings[defaultSwiperConfig][loop]',
+        on: settings.defaultSwiperConfig.loop ?? true,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.loop'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.loop') ?
+            'This is being overridden by the <code>defaultSwiperConfig.loop</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    {{ forms.textField({
+        label: 'Speed (ms)'|t('slideshow-manager'),
+        instructions: 'Transition speed between slides'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-speed',
+        name: 'settings[defaultSwiperConfig][speed]',
+        value: settings.defaultSwiperConfig.speed ?? 300,
+        type: 'number',
+        min: 0,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.speed'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.speed') ?
+            'This is being overridden by the <code>defaultSwiperConfig.speed</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    {{ forms.selectField({
+        label: 'Effect'|t('slideshow-manager'),
+        instructions: 'Transition effect. <strong>Note:</strong> If using npm installation instead of CDN, effects other than "slide" require importing modules: <code>import { EffectFade, EffectCube, EffectFlip, EffectCoverflow, EffectCards, EffectCreative } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-effect',
+        name: 'settings[defaultSwiperConfig][effect]',
+        value: settings.defaultSwiperConfig.effect ?? 'slide',
+        options: [
+            { label: 'Slide', value: 'slide' },
+            { label: 'Fade', value: 'fade' },
+            { label: 'Cube', value: 'cube' },
+            { label: 'Coverflow', value: 'coverflow' },
+            { label: 'Flip', value: 'flip' },
+            { label: 'Cards', value: 'cards' },
+            { label: 'Creative', value: 'creative' },
+        ],
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.effect'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.effect') ?
+            'This is being overridden by the <code>defaultSwiperConfig.effect</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% js %}
+// Initialize Craft's FieldToggle for elements where toggle parameter isn't auto-working
+if (Craft.ui.FieldToggle) {
+    setTimeout(function() {
+        new Craft.ui.FieldToggle(document.getElementById('defaultSwiperConfig-navigation'));
+        new Craft.ui.FieldToggle(document.getElementById('defaultSwiperConfig-autoplay-enabled'));
+    }, 100);
+}
+{% endjs %}

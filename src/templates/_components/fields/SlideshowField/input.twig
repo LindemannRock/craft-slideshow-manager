@@ -1,0 +1,210 @@
+{#
+ # Slideshow Field Input
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% import "_includes/forms" as forms %}
+
+<div class="slideshow-field-wrapper">
+    {# Hidden field to store config as JSON - MUST be outside details for visibility #}
+    <input type="hidden"
+           id="{{ id }}-swiper-config"
+           name="slideshowConfig[{{ id }}]"
+           value="{{ value|json_encode }}">
+
+    {# Swiper Configuration (collapsible) #}
+    <details class="slideshow-config-details">
+        <summary class="slideshow-config-summary">
+            <strong>{{ 'Slideshow Configuration'|t('slideshow-manager') }}</strong>
+            <span class="light">{{ 'Configure how this slideshow behaves'|t('slideshow-manager') }}</span>
+        </summary>
+
+        <div class="slideshow-config-content">
+            {% set useCustom = value.useCustomConfig ?? false %}
+            {% set config = useCustom ? (value.swiperConfig ?? defaultConfig) : defaultConfig %}
+
+            {{ forms.lightswitchField({
+                label: 'Use Custom Configuration'|t('slideshow-manager'),
+                instructions: 'Override global defaults with custom settings for this entry.'|t('slideshow-manager'),
+                id: id ~ '-use-custom',
+                on: useCustom,
+            }) }}
+
+            <div id="custom-config-fields-{{ id }}">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                    <div>
+                        {{ forms.lightswitchField({
+                            label: 'Navigation'|t('slideshow-manager'),
+                            id: id ~ '-navigation',
+                            on: config.navigation ?? true,
+                        }) }}
+
+                        {{ forms.lightswitchField({
+                            label: 'Pagination'|t('slideshow-manager'),
+                            id: id ~ '-pagination',
+                            on: config.pagination.enabled ?? true,
+                        }) }}
+
+                        {{ forms.lightswitchField({
+                            label: 'Loop'|t('slideshow-manager'),
+                            id: id ~ '-loop',
+                            on: config.loop ?? true,
+                        }) }}
+                    </div>
+
+                    <div>
+                        {{ forms.lightswitchField({
+                            label: 'Autoplay'|t('slideshow-manager'),
+                            id: id ~ '-autoplay',
+                            on: config.autoplay.enabled ?? false,
+                        }) }}
+
+                        {{ forms.textField({
+                            label: 'Autoplay Delay (ms)'|t('slideshow-manager'),
+                            id: id ~ '-autoplay-delay',
+                            value: config.autoplay.delay ?? 3000,
+                            type: 'number',
+                            min: 1000,
+                        }) }}
+
+                        {{ forms.selectField({
+                            label: 'Effect'|t('slideshow-manager'),
+                            id: id ~ '-effect',
+                            value: config.effect ?? 'slide',
+                            options: [
+                                { label: 'Slide', value: 'slide' },
+                                { label: 'Fade', value: 'fade' },
+                                { label: 'Cube', value: 'cube' },
+                                { label: 'Coverflow', value: 'coverflow' },
+                                { label: 'Flip', value: 'flip' },
+                            ],
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </details>
+
+    {# Render the Matrix field input (slides) #}
+    <div class="slideshow-slides-wrapper">
+        {{ matrixHtml|raw }}
+    </div>
+</div>
+
+{% css %}
+.slideshow-config-details {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+}
+
+.slideshow-config-summary {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.slideshow-config-summary:hover {
+    background: #f3f4f6;
+    border-radius: 3px;
+}
+
+.slideshow-config-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+{% endcss %}
+
+<script>
+(function() {
+    console.log('=== SLIDESHOW SCRIPT LOADED for {{ id|e('js') }} ===');
+
+    // Wait for DOM to be ready and retry if needed (max 10 attempts)
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    function init() {
+        attempts++;
+
+        const hiddenField = document.getElementById('{{ id|e('js') }}-swiper-config');
+        if (!hiddenField) {
+            console.error('Hidden field not found (attempt ' + attempts + '/' + maxAttempts + '):', '{{ id|e('js') }}-swiper-config');
+
+            if (attempts < maxAttempts) {
+                // Try again after a short delay in case Matrix is still loading
+                setTimeout(init, 200);
+            } else {
+                console.error('GIVING UP: Hidden field never appeared. Template may not be rendering.');
+                console.log('Looking for wrapper:', document.querySelector('.slideshow-field-wrapper'));
+            }
+            return;
+        }
+
+        console.log('Hidden field found:', hiddenField);
+
+        // Find the form
+        const form = hiddenField.closest('form');
+        if (!form) {
+            console.error('Form not found');
+            if (attempts < maxAttempts) {
+                setTimeout(init, 200);
+            }
+            return;
+        }
+
+        console.log('Form found, attaching submit handler');
+
+        // Helper to get lightswitch value
+        function getLightswitchValue(id) {
+            const lightswitch = document.getElementById(id);
+            if (!lightswitch) {
+                console.warn('Lightswitch not found:', id);
+                return false;
+            }
+            const input = lightswitch.querySelector('input[type="checkbox"]');
+            return input ? input.checked : false;
+        }
+
+        // Attach to form submit
+        form.addEventListener('submit', function(e) {
+            console.log('=== FORM SUBMITTING - SERIALIZING CONFIG ===');
+
+            const configData = {
+                useCustomConfig: getLightswitchValue('{{ id|e('js') }}-use-custom'),
+                swiperConfig: {
+                    navigation: getLightswitchValue('{{ id|e('js') }}-navigation'),
+                    pagination: {
+                        enabled: getLightswitchValue('{{ id|e('js') }}-pagination')
+                    },
+                    loop: getLightswitchValue('{{ id|e('js') }}-loop'),
+                    autoplay: {
+                        enabled: getLightswitchValue('{{ id|e('js') }}-autoplay'),
+                        delay: parseInt(document.getElementById('{{ id|e('js') }}-autoplay-delay').value) || 3000
+                    },
+                    effect: document.getElementById('{{ id|e('js') }}-effect').value
+                }
+            };
+
+            hiddenField.value = JSON.stringify(configData);
+            console.log('Slideshow config serialized:', configData);
+            console.log('Hidden field value:', hiddenField.value);
+        }, true); // Capture phase
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        // Use setTimeout to ensure Matrix field has finished initializing
+        setTimeout(init, 100);
+    }
+})();
+</script>

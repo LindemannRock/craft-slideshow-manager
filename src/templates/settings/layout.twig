@@ -1,0 +1,348 @@
+{#
+ # Slideshow Manager Layout & Responsive Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Layout & Responsive'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'layout' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/layout') }}
+        {{ hiddenInput('section', 'layout') }}
+
+        <h2 style="margin-top: 0;">{{ 'Slides Display'|t('slideshow-manager') }}</h2>
+
+    {{ forms.textField({
+        label: 'Slides Per View'|t('slideshow-manager'),
+        instructions: 'Number of slides per view (supports decimal for partial slides)'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-slidesPerView',
+        name: 'settings[defaultSwiperConfig][slidesPerView]',
+        value: settings.defaultSwiperConfig.slidesPerView ?? 1,
+        type: 'number',
+        min: 1,
+        step: 0.1,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.slidesPerView'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.slidesPerView') ?
+            'This is being overridden by the <code>defaultSwiperConfig.slidesPerView</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    {{ forms.textField({
+        label: 'Space Between (px)'|t('slideshow-manager'),
+        instructions: 'Distance between slides in pixels'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-spaceBetween',
+        name: 'settings[defaultSwiperConfig][spaceBetween]',
+        value: settings.defaultSwiperConfig.spaceBetween ?? 0,
+        type: 'number',
+        min: 0,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.spaceBetween'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.spaceBetween') ?
+            'This is being overridden by the <code>defaultSwiperConfig.spaceBetween</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: 'Centered Slides'|t('slideshow-manager'),
+        instructions: 'Center the active slide instead of aligning to the left'|t('slideshow-manager'),
+        id: 'defaultSwiperConfig-centeredSlides',
+        name: 'settings[defaultSwiperConfig][centeredSlides]',
+        on: settings.defaultSwiperConfig.centeredSlides ?? false,
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.centeredSlides'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.centeredSlides') ?
+            'This is being overridden by the <code>defaultSwiperConfig.centeredSlides</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <hr>
+
+    <h2>{{ 'Grid Mode'|t('slideshow-manager') }}</h2>
+
+    {{ forms.lightswitchField({
+        label: 'Enable Grid'|t('slideshow-manager'),
+        instructions: 'Display slides in a grid layout. <strong>Note:</strong> If using npm installation, requires: <code>import { Grid } from \'swiper/modules\'</code>'|t('slideshow-manager')|raw,
+        id: 'defaultSwiperConfig-grid-enabled',
+        name: 'settings[defaultSwiperConfig][grid][enabled]',
+        on: settings.defaultSwiperConfig.grid.enabled ?? false,
+        toggle: 'grid-options',
+        disabled: settings.isOverriddenByConfig('defaultSwiperConfig.grid.enabled'),
+        warning: settings.isOverriddenByConfig('defaultSwiperConfig.grid.enabled') ?
+            'This is being overridden by the <code>defaultSwiperConfig.grid.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+    }) }}
+
+    <div id="grid-options" class="{{ (settings.defaultSwiperConfig.grid.enabled ?? false) ? '' : 'hidden' }}">
+        {{ forms.textField({
+            label: 'Grid Rows'|t('slideshow-manager'),
+            instructions: 'Number of rows per slide group'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-grid-rows',
+            name: 'settings[defaultSwiperConfig][grid][rows]',
+            value: settings.defaultSwiperConfig.grid.rows ?? 1,
+            type: 'number',
+            min: 1,
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.grid.rows'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.grid.rows') ?
+                'This is being overridden by the <code>defaultSwiperConfig.grid.rows</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.selectField({
+            label: 'Grid Fill'|t('slideshow-manager'),
+            id: 'defaultSwiperConfig-grid-fill',
+            name: 'settings[defaultSwiperConfig][grid][fill]',
+            value: settings.defaultSwiperConfig.grid.fill ?? 'row',
+            options: [
+                { label: 'Row', value: 'row' },
+                { label: 'Column', value: 'column' },
+            ],
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.grid.fill'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.grid.fill') ?
+                'This is being overridden by the <code>defaultSwiperConfig.grid.fill</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+    </div>
+
+    <hr>
+
+    <h2>{{ 'Responsive Breakpoints'|t('slideshow-manager') }}</h2>
+
+    {% set breakpointsOverridden = settings.isOverriddenByConfig('defaultSwiperConfig.breakpoints') %}
+
+    {% if breakpointsOverridden %}
+        <p class="light">{{ 'Define how many slides to show at different screen widths. Breakpoints apply from their width upwards.'|t('slideshow-manager') }}</p>
+        <p class="warning with-icon">{{ 'This is being overridden by the <code>defaultSwiperConfig.breakpoints</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw }}</p>
+    {% else %}
+        <p class="light">{{ 'Define how many slides to show at different screen widths. Breakpoints apply from their width upwards.'|t('slideshow-manager') }}</p>
+
+        <div id="breakpoints-container" class="breakpoints-repeater">
+            {% set breakpoints = settings.defaultSwiperConfig.breakpoints ?? [] %}
+
+            {% for breakpoint in breakpoints %}
+                <div class="breakpoint-row" data-index="{{ loop.index0 }}">
+                    <div class="breakpoint-fields">
+                        {{ forms.textField({
+                            label: 'Min Width (px)'|t('slideshow-manager'),
+                            name: 'settings[defaultSwiperConfig][breakpoints][' ~ loop.index0 ~ '][width]',
+                            value: breakpoint.width ?? 0,
+                            type: 'number',
+                            min: 0,
+                            size: 10,
+                        }) }}
+
+                        {{ forms.textField({
+                            label: 'Slides Per View'|t('slideshow-manager'),
+                            name: 'settings[defaultSwiperConfig][breakpoints][' ~ loop.index0 ~ '][slidesPerView]',
+                            value: breakpoint.slidesPerView ?? 1,
+                            type: 'number',
+                            min: 1,
+                            step: 0.1,
+                            size: 10,
+                        }) }}
+
+                        {{ forms.textField({
+                            label: 'Space Between (px)'|t('slideshow-manager'),
+                            name: 'settings[defaultSwiperConfig][breakpoints][' ~ loop.index0 ~ '][spaceBetween]',
+                            value: breakpoint.spaceBetween ?? 0,
+                            type: 'number',
+                            min: 0,
+                            size: 10,
+                        }) }}
+
+                        <div class="breakpoint-actions">
+                            <button type="button" class="btn delete-breakpoint" title="{{ 'Delete breakpoint'|t('slideshow-manager') }}">
+                                {{ 'Delete'|t('slideshow-manager') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="button" id="add-breakpoint" class="btn add icon">
+                {{ 'Add Breakpoint'|t('slideshow-manager') }}
+            </button>
+            <button type="button" id="restore-default-breakpoints" class="btn">
+                {{ 'Restore Defaults'|t('slideshow-manager') }}
+            </button>
+        </div>
+    {% endif %}
+
+{% css %}
+.breakpoints-repeater {
+    margin-bottom: 1rem;
+    container-type: inline-size;
+}
+
+.breakpoint-row {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+}
+
+.breakpoint-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+}
+
+.breakpoint-fields > .field {
+    margin-block: 0 !important;
+}
+
+.breakpoint-fields input {
+    width: 100%;
+}
+
+.breakpoint-actions {
+    display: flex;
+    align-items: flex-end;
+}
+
+.breakpoint-actions .btn {
+    width: 100%;
+}
+
+.delete-breakpoint {
+    white-space: nowrap;
+}
+
+@container (min-width: 900px) {
+    .breakpoint-fields {
+        grid-template-columns: 1fr 1fr 1fr auto;
+    }
+    .breakpoint-actions .btn {
+        width: auto;
+        min-width: 80px;
+    }
+}
+{% endcss %}
+
+{% js %}
+(function() {
+    const container = document.getElementById('breakpoints-container');
+    const addBtn = document.getElementById('add-breakpoint');
+    const restoreBtn = document.getElementById('restore-default-breakpoints');
+    let breakpointIndex = {{ (settings.defaultSwiperConfig.breakpoints ?? [])|length }};
+
+    // Add new breakpoint
+    addBtn.addEventListener('click', function() {
+        const template = `
+            <div class="breakpoint-row" data-index="${breakpointIndex}">
+                <div class="breakpoint-fields">
+                    <div class="field">
+                        <div class="heading">
+                            <label>{{ 'Min Width (px)'|t('slideshow-manager') }}</label>
+                        </div>
+                        <div class="input">
+                            <input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][width]" value="0" min="0" size="10" class="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="heading">
+                            <label>{{ 'Slides Per View'|t('slideshow-manager') }}</label>
+                        </div>
+                        <div class="input">
+                            <input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][slidesPerView]" value="1" min="1" step="0.1" size="10" class="text">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="heading">
+                            <label>{{ 'Space Between (px)'|t('slideshow-manager') }}</label>
+                        </div>
+                        <div class="input">
+                            <input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][spaceBetween]" value="0" min="0" size="10" class="text">
+                        </div>
+                    </div>
+
+                    <div class="breakpoint-actions">
+                        <button type="button" class="btn delete-breakpoint" title="{{ 'Delete breakpoint'|t('slideshow-manager') }}">
+                            {{ 'Delete'|t('slideshow-manager') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', template);
+        breakpointIndex++;
+
+        // Trigger Craft's change tracking
+        Craft.cp.checkForm();
+    });
+
+    // Delete breakpoint
+    container.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-breakpoint')) {
+            e.target.closest('.breakpoint-row').remove();
+
+            // Trigger Craft's change tracking
+            Craft.cp.checkForm();
+        }
+    });
+
+    // Restore default breakpoints
+    if (restoreBtn) {
+        restoreBtn.addEventListener('click', function() {
+            if (!confirm('{{ 'This will replace all existing breakpoints with defaults (0px, 640px, 768px, 1024px). Continue?'|t('slideshow-manager') }}')) {
+                return;
+            }
+
+            // Clear existing breakpoints
+            container.innerHTML = '';
+            breakpointIndex = 0;
+
+            // Default breakpoints: mobile, tablet, desktop, large desktop
+            const defaults = [
+                { width: 0, slidesPerView: 1, spaceBetween: 0 },
+                { width: 640, slidesPerView: 1, spaceBetween: 10 },
+                { width: 768, slidesPerView: 2, spaceBetween: 20 },
+                { width: 1024, slidesPerView: 3, spaceBetween: 30 }
+            ];
+
+            defaults.forEach(function(bp) {
+                const template = `
+                    <div class="breakpoint-row" data-index="${breakpointIndex}">
+                        <div class="breakpoint-fields">
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Min Width (px)'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][width]" value="${bp.width}" min="0" size="10" class="text"></div>
+                            </div>
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Slides Per View'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][slidesPerView]" value="${bp.slidesPerView}" min="1" step="0.1" size="10" class="text"></div>
+                            </div>
+                            <div class="field">
+                                <div class="heading"><label>{{ 'Space Between (px)'|t('slideshow-manager') }}</label></div>
+                                <div class="input"><input type="number" name="settings[defaultSwiperConfig][breakpoints][${breakpointIndex}][spaceBetween]" value="${bp.spaceBetween}" min="0" size="10" class="text"></div>
+                            </div>
+                            <div class="breakpoint-actions">
+                                <button type="button" class="btn delete-breakpoint" title="{{ 'Delete breakpoint'|t('slideshow-manager') }}">{{ 'Delete'|t('slideshow-manager') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', template);
+                breakpointIndex++;
+            });
+
+            // Trigger change detection
+            Craft.cp.checkForm();
+        });
+    }
+})();
+{% endjs %}
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,202 @@
+{#
+ # Slideshow Configuration (renders ABOVE the Matrix field)
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% import "_includes/forms" as forms %}
+
+{% set useCustom = value.useCustomConfig ?? false %}
+{% set config = useCustom ? (value.swiperConfig ?? defaultConfig) : defaultConfig %}
+{% set uniqueId = 'slideshow-' ~ fieldId ~ '-' ~ random() %}
+
+<div class="slideshow-config-toggle" data-slideshow-field="{{ uniqueId }}">
+    {{ forms.lightswitchField({
+        label: 'Use Custom Configuration'|t('slideshow-manager'),
+        instructions: 'Override global defaults with custom settings for this entry.'|t('slideshow-manager'),
+        name: namespace ~ '[slideshowConfig][useCustom]',
+        on: useCustom,
+        toggle: 'slideshow-fields-' ~ uniqueId,
+    }) }}
+</div>
+
+<div id="slideshow-fields-{{ uniqueId }}" class="{{ useCustom ? '' : 'hidden' }}">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+        <div>
+            {{ forms.lightswitchField({
+                label: 'Navigation'|t('slideshow-manager'),
+                instructions: 'Show navigation arrows'|t('slideshow-manager'),
+                name: namespace ~ '[slideshowConfig][navigation]',
+                on: config.navigation ?? true,
+                toggle: 'field-navigation-visibility-' ~ uniqueId,
+            }) }}
+
+            <div id="field-navigation-visibility-{{ uniqueId }}" class="{{ (config.navigation ?? true) ? '' : 'hidden' }}">
+                {{ forms.selectField({
+                    label: 'Navigation Visibility'|t('slideshow-manager'),
+                    name: namespace ~ '[slideshowConfig][navigationVisibility]',
+                    value: config.navigationVisibility ?? 'default',
+                    options: [
+                        { label: 'Always Visible', value: 'default' },
+                        { label: 'Hide on Mobile', value: 'hide-mobile' },
+                        { label: 'Hide on Desktop', value: 'hide-desktop' },
+                        { label: 'Mobile Only', value: 'mobile-only' },
+                        { label: 'Desktop Only', value: 'desktop-only' },
+                    ],
+                }) }}
+            </div>
+
+            {{ forms.lightswitchField({
+                label: 'Pagination'|t('slideshow-manager'),
+                instructions: 'Show pagination dots'|t('slideshow-manager'),
+                name: namespace ~ '[slideshowConfig][paginationEnabled]',
+                on: config.pagination.enabled ?? true,
+                toggle: 'field-pagination-visibility-' ~ uniqueId,
+            }) }}
+
+            <div id="field-pagination-visibility-{{ uniqueId }}" class="{{ (config.pagination.enabled ?? true) ? '' : 'hidden' }}">
+                {{ forms.selectField({
+                    label: 'Pagination Visibility'|t('slideshow-manager'),
+                    name: namespace ~ '[slideshowConfig][paginationVisibility]',
+                    value: config.paginationVisibility ?? 'default',
+                    options: [
+                        { label: 'Always Visible', value: 'default' },
+                        { label: 'Hide on Mobile', value: 'hide-mobile' },
+                        { label: 'Hide on Desktop', value: 'hide-desktop' },
+                        { label: 'Mobile Only', value: 'mobile-only' },
+                        { label: 'Desktop Only', value: 'desktop-only' },
+                    ],
+                }) }}
+            </div>
+
+            {{ forms.lightswitchField({
+                label: 'Loop'|t('slideshow-manager'),
+                instructions: 'Continuous loop mode'|t('slideshow-manager'),
+                name: namespace ~ '[slideshowConfig][loop]',
+                on: config.loop ?? true,
+            }) }}
+        </div>
+
+        <div>
+            {{ forms.lightswitchField({
+                label: 'Autoplay'|t('slideshow-manager'),
+                instructions: 'Auto-advance slides'|t('slideshow-manager'),
+                name: namespace ~ '[slideshowConfig][autoplayEnabled]',
+                on: config.autoplay.enabled ?? false,
+            }) }}
+
+            {{ forms.selectField({
+                label: 'Effect'|t('slideshow-manager'),
+                name: namespace ~ '[slideshowConfig][effect]',
+                value: config.effect ?? 'slide',
+                options: [
+                    { label: 'Slide', value: 'slide' },
+                    { label: 'Fade', value: 'fade' },
+                    { label: 'Cube', value: 'cube' },
+                    { label: 'Coverflow', value: 'coverflow' },
+                    { label: 'Flip', value: 'flip' },
+                    { label: 'Cards', value: 'cards' },
+                    { label: 'Creative', value: 'creative' },
+                ],
+            }) }}
+        </div>
+    </div>
+
+    <hr style="margin: 1.5rem 0;">
+
+    <h3>{{ 'Responsive Breakpoints'|t('slideshow-manager') }}</h3>
+    <p class="light">{{ 'Define how many slides to show at different screen widths.'|t('slideshow-manager') }}</p>
+
+    <div id="field-breakpoints-container-{{ uniqueId }}" class="breakpoints-repeater">
+        {% set breakpoints = config.breakpoints ?? defaultConfig.breakpoints ?? [] %}
+
+        {% for breakpoint in breakpoints %}
+            <div class="breakpoint-row" data-index="{{ loop.index0 }}">
+                <div class="breakpoint-fields" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    {{ forms.textField({
+                        label: 'Min Width (px)'|t('slideshow-manager'),
+                        name: namespace ~ '[slideshowConfig][breakpoints][' ~ loop.index0 ~ '][width]',
+                        value: breakpoint.width ?? 0,
+                        type: 'number',
+                        min: 0,
+                        size: 8,
+                    }) }}
+
+                    {{ forms.textField({
+                        label: 'Slides Per View'|t('slideshow-manager'),
+                        name: namespace ~ '[slideshowConfig][breakpoints][' ~ loop.index0 ~ '][slidesPerView]',
+                        value: breakpoint.slidesPerView ?? 1,
+                        type: 'number',
+                        min: 1,
+                        step: 0.1,
+                        size: 8,
+                    }) }}
+
+                    {{ forms.textField({
+                        label: 'Space Between (px)'|t('slideshow-manager'),
+                        name: namespace ~ '[slideshowConfig][breakpoints][' ~ loop.index0 ~ '][spaceBetween]',
+                        value: breakpoint.spaceBetween ?? 0,
+                        type: 'number',
+                        min: 0,
+                        size: 8,
+                    }) }}
+
+                    <div style="padding-bottom: 0.5rem;">
+                        <button type="button" class="btn small error delete-field-breakpoint" title="{{ 'Delete breakpoint'|t('slideshow-manager') }}">
+                            {{ 'Delete'|t('slideshow-manager') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" class="btn add icon add-field-breakpoint" data-container="field-breakpoints-container-{{ uniqueId }}">
+        {{ 'Add Breakpoint'|t('slideshow-manager') }}
+    </button>
+</div>
+
+<hr style="margin: 1.5rem 0;">
+
+{% js %}
+(function() {
+    const containerId = 'field-breakpoints-container-{{ uniqueId }}';
+    const container = document.getElementById(containerId);
+    let breakpointIndex = {{ (config.breakpoints ?? defaultConfig.breakpoints ?? [])|length }};
+
+    // Add breakpoint button handler
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('add-field-breakpoint') && e.target.dataset.container === containerId) {
+            const template = `
+                <div class="breakpoint-row" data-index="${breakpointIndex}" style="margin-bottom: 1rem; padding: 1rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 5px;">
+                    <div class="breakpoint-fields" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Min Width (px)'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="{{ namespace }}[slideshowConfig][breakpoints][${breakpointIndex}][width]" value="0" min="0" size="8" class="text"></div>
+                        </div>
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Slides Per View'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="{{ namespace }}[slideshowConfig][breakpoints][${breakpointIndex}][slidesPerView]" value="1" min="1" step="0.1" size="8" class="text"></div>
+                        </div>
+                        <div class="field">
+                            <div class="heading"><label>{{ 'Space Between (px)'|t('slideshow-manager') }}</label></div>
+                            <div class="input"><input type="number" name="{{ namespace }}[slideshowConfig][breakpoints][${breakpointIndex}][spaceBetween]" value="0" min="0" size="8" class="text"></div>
+                        </div>
+                        <div style="padding-bottom: 0.5rem;">
+                            <button type="button" class="btn small error delete-field-breakpoint">{{ 'Delete'|t('slideshow-manager') }}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', template);
+            breakpointIndex++;
+        }
+
+        // Delete breakpoint
+        if (e.target.classList.contains('delete-field-breakpoint')) {
+            e.target.closest('.breakpoint-row').remove();
+        }
+    });
+})();
+{% endjs %}
