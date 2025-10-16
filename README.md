@@ -136,25 +136,20 @@ composer require lindemannrock/craft-slideshow-manager
 
 ## Installation
 
-### Via Composer (Development)
-
-Until published on Packagist, install directly from the repository:
-
-```bash
-cd /path/to/project
-composer config repositories.slideshow-manager vcs https://github.com/LindemannRock/craft-slideshow-manager
-composer require lindemannrock/craft-slideshow-manager:dev-main
-./craft plugin/install slideshow-manager
-```
-
-### Via Composer (Production - Coming Soon)
-
-Once published on Packagist:
+### Via Composer
 
 ```bash
 cd /path/to/project
 composer require lindemannrock/craft-slideshow-manager
 ./craft plugin/install slideshow-manager
+```
+
+### Using DDEV
+
+```bash
+cd /path/to/project
+ddev composer require lindemannrock/craft-slideshow-manager
+ddev craft plugin/install slideshow-manager
 ```
 
 ### Via Control Panel
