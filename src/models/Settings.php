@@ -13,12 +13,15 @@ use craft\base\Model;
 use craft\db\Query;
 use craft\helpers\Db;
 use craft\helpers\Json;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
  * Slideshow Manager Settings Model
  */
 class Settings extends Model
 {
+    use LoggingTrait;
+
     /**
      * @var array Track which settings are overridden by config
      */
@@ -104,6 +107,15 @@ class Settings extends Model
     /**
      * @inheritdoc
      */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('slideshow-manager');
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function defineRules(): array
     {
         return [
@@ -138,16 +150,16 @@ class Settings extends Model
                 if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
                     // Web request - use session to prevent duplicate warnings
                     if (Craft::$app->getSession()->get('sm_debug_config_warning') === null) {
-                        Craft::warning('Log level "debug" from config file changed to "info" because devMode is disabled. Please update your config/slideshow-manager.php file.', 'slideshow-manager');
+                        $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled. Please update your config/slideshow-manager.php file.');
                         Craft::$app->getSession()->set('sm_debug_config_warning', true);
                     }
                 } else {
                     // Console request - just log without session
-                    Craft::warning('Log level "debug" from config file changed to "info" because devMode is disabled. Please update your config/slideshow-manager.php file.', 'slideshow-manager');
+                    $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled. Please update your config/slideshow-manager.php file.');
                 }
             } else {
                 // Database setting - save the correction
-                Craft::warning('Log level automatically changed from "debug" to "info" because devMode is disabled. This setting has been saved.', 'slideshow-manager');
+                $this->logWarning('Log level automatically changed from "debug" to "info" because devMode is disabled. This setting has been saved.');
                 $this->saveToDatabase();
             }
         }
@@ -188,7 +200,7 @@ class Settings extends Model
                 ->where(['id' => 1])
                 ->one();
         } catch (\Exception $e) {
-            Craft::error('Failed to load settings from database: ' . $e->getMessage(), 'slideshow-manager');
+            $settings->logError('Failed to load settings from database', ['error' => $e->getMessage()]);
             return $settings;
         }
 
@@ -223,7 +235,7 @@ class Settings extends Model
             // Set attributes from database
             $settings->setAttributes($row, false);
         } else {
-            Craft::warning('No settings found in database', 'slideshow-manager');
+            $settings->logWarning('No settings found in database');
         }
 
         // Apply config file overrides
@@ -246,7 +258,7 @@ class Settings extends Model
 
         // Validate settings
         if (!$settings->validate()) {
-            Craft::error('Slideshow Manager settings validation failed: ' . print_r($settings->getErrors(), true), 'slideshow-manager');
+            $settings->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
         }
 
         return $settings;
@@ -298,7 +310,7 @@ class Settings extends Model
             'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
         ];
 
-        Craft::info('Attempting to save settings: ' . Json::encode($attributes), 'slideshow-manager');
+        $this->logDebug('Saving settings to database', ['fields' => array_keys($attributes)]);
 
         // Update existing settings (we know there's always one row from migration)
         try {
@@ -308,7 +320,7 @@ class Settings extends Model
 
             return $result !== false;
         } catch (\Exception $e) {
-            Craft::error('Failed to save Slideshow Manager settings: ' . $e->getMessage(), 'slideshow-manager');
+            $this->logError('Settings save failed', ['error' => $e->getMessage()]);
             return false;
         }
     }

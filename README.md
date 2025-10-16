@@ -706,10 +706,36 @@ return [
 - **Web Interface**: View and filter logs in CP at Slideshow Manager → Logs
 
 ### What's Logged
-- **Error**: Configuration errors, field save failures, asset loading errors
-- **Warning**: Invalid configurations, missing dependencies, slow operations (>1s)
-- **Info**: Configuration changes, field saves, settings updates
-- **Debug**: Detailed configuration processing, Swiper initialization, cache operations, performance timing
+
+The plugin logs meaningful events using context arrays for structured data. All logs include user context when available.
+
+#### Settings Operations (SettingsController)
+- **[INFO]** `Settings save requested` - When user initiates settings save
+  - Context: `userId`, `fields` (list of changed fields)
+- **[WARNING]** `Settings validation failed` - When settings fail validation
+  - Context: `errors` (validation error details)
+- **[ERROR]** `Database save failed` - When database update fails
+- **[INFO]** `Settings saved successfully` - When settings save completes
+  - Context: `userId`
+
+#### Settings Model (Settings)
+- **[WARNING]** `Log level "debug" from config file changed to "info"` - When debug level used without devMode
+- **[WARNING]** `Log level automatically changed from "debug" to "info"` - When debug level auto-corrected
+- **[ERROR]** `Failed to load settings from database` - Database query errors
+  - Context: `error` (exception message)
+- **[WARNING]** `No settings found in database` - Missing settings record
+- **[ERROR]** `Settings validation failed` - Settings model validation errors
+  - Context: `errors` (validation errors array)
+- **[DEBUG]** `Saving settings to database` - Database save operation details
+  - Context: `fields` (list of fields being saved)
+- **[ERROR]** `Settings save failed` - Database save errors
+  - Context: `error` (exception message)
+
+#### Field Operations (SlideshowConfigField)
+- **[WARNING]** `Invalid config JSON` - When field contains malformed JSON
+  - Context: `value` (invalid JSON string), `elementId`
+
+**Note:** The field's `normalizeValue()` method is called multiple times per request by Craft (for display, validation, preview, etc.), so normal operations are not logged to prevent log flooding. Only actual errors are logged.
 
 ### Log Management
 Access logs through the Control Panel:

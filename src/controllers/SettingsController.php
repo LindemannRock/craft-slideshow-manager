@@ -128,6 +128,12 @@ class SettingsController extends Controller
         // Get settings from request (nested under 'settings' key)
         $postedSettings = $request->getBodyParam('settings', []);
 
+        // Log save attempt
+        $this->logInfo('Settings save requested', [
+            'userId' => Craft::$app->getUser()->getId(),
+            'fields' => array_keys($postedSettings),
+        ]);
+
         // Only update non-overridden settings
         if (!$settings->isOverridden('pluginName')) {
             $settings->pluginName = $postedSettings['pluginName'] ?? $settings->pluginName;
@@ -176,6 +182,9 @@ class SettingsController extends Controller
                 $errorMessage .= ' ' . implode(' ', $errorDetails);
             }
 
+            // Log validation failure
+            $this->logWarning('Settings validation failed', ['errors' => $errors]);
+
             Craft::$app->getSession()->setError($errorMessage);
 
             Craft::$app->getUrlManager()->setRouteParams([
@@ -187,12 +196,18 @@ class SettingsController extends Controller
 
         // Save to database using the new method
         if (!$settings->saveToDatabase()) {
+            $this->logError('Database save failed');
             Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Couldn\'t save plugin settings.'));
             return null;
         }
 
         // Force reload settings from database to clear Craft's internal cache
         $plugin->reloadSettings();
+
+        // Log successful save
+        $this->logInfo('Settings saved successfully', [
+            'userId' => Craft::$app->getUser()->getId(),
+        ]);
 
         Craft::$app->getSession()->setNotice(Craft::t('slideshow-manager', 'Plugin settings saved.'));
 

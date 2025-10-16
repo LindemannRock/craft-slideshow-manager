@@ -73,7 +73,19 @@ class SlideshowConfigField extends Field
 
         // If it's a string (from database), decode it
         if (is_string($value) && !empty($value)) {
-            $value = Json::decodeIfJson($value);
+            $decoded = Json::decodeIfJson($value);
+
+            // Check if decoding failed (returns original string on failure)
+            if (is_string($decoded) && $decoded === $value) {
+                // Only log actual errors (invalid JSON)
+                $this->logWarning('Invalid config JSON', [
+                    'value' => $value,
+                    'elementId' => $element?->id,
+                ]);
+                return $defaults;
+            }
+
+            $value = $decoded;
         }
 
         // If it's an array (from Craft extraction or database), merge with defaults
@@ -82,10 +94,13 @@ class SlideshowConfigField extends Field
             foreach ($value as $key => $val) {
                 $result[$key] = $val;
             }
+
+            // Don't log normal operations - normalizeValue is called multiple times per request
             return $result;
         }
 
         // Empty value - return defaults
+        // Don't log - this is normal operation
         return $defaults;
     }
 
