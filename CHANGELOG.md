@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.0.0...v1.1.0) (2025-10-16)
+
+
+### Features
+
+* add comprehensive logging with structured context arrays ([f9ed377](https://github.com/LindemannRock/craft-slideshow-manager/commit/f9ed37786feb02a3fc0ae5bd466838fbe3326885))
+
 ## 1.0.0 (2025-10-15)
 
 
