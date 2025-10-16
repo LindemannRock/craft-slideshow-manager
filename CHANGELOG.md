@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.1.0...v1.2.0) (2025-10-16)
+
+
+### Features
+
+* update README and add detailed logging documentation ([93d461c](https://github.com/LindemannRock/craft-slideshow-manager/commit/93d461cef0b0a9cfa84b458ddf83de22d56d079c))
+
 ## [1.1.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.0.0...v1.1.0) (2025-10-16)
 
 
