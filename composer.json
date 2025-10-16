@@ -36,12 +36,6 @@
         "craftcms/cms": "^5.0.0",
         "lindemannrock/craft-logging-library": "^1.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/LindemannRock/craft-logging-library.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "lindemannrock\\slideshowmanager\\": "src/"
