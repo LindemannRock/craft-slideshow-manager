@@ -52,7 +52,6 @@ A comprehensive slideshow management plugin with Swiper.js integration for Craft
     - [Log Levels](#log-levels)
     - [Configuration](#configuration-1)
     - [Log Files](#log-files)
-    - [What's Logged](#whats-logged)
     - [Log Management](#log-management)
   - [Troubleshooting](#troubleshooting)
     - [Slideshow Not Initializing](#slideshow-not-initializing)
@@ -115,7 +114,7 @@ composer require lindemannrock/craft-slideshow-manager
 {{ craft.slideshowManager.initSlider(sliderId) }}
 ```
 
-**That's it!** Your slideshow is live. See [Usage](#usage) for more details and [Examples](docs/examples.md) for comprehensive use cases.
+**That's it!** Your slideshow is live. See [Usage](#usage) for more details and [Examples](docs/EXAMPLES.md) for comprehensive use cases.
 
 ## Features
 
@@ -684,7 +683,7 @@ Includes examples for:
 Slideshow Manager uses the [LindemannRock Logging Library](https://github.com/LindemannRock/craft-logging-library) for centralized, structured logging across all LindemannRock plugins.
 
 ### Log Levels
-- **Error**: Critical errors only
+- **Error**: Critical errors only (default)
 - **Warning**: Errors and warnings
 - **Info**: General information
 - **Debug**: Detailed debugging (includes performance metrics, requires devMode)
@@ -693,7 +692,7 @@ Slideshow Manager uses the [LindemannRock Logging Library](https://github.com/Li
 ```php
 // config/slideshow-manager.php
 return [
-    'logLevel' => 'info', // error, warning, info, or debug
+    'logLevel' => 'error', // error, warning, info, or debug
 ];
 ```
 
@@ -705,38 +704,6 @@ return [
 - **Format**: Structured JSON logs with context data
 - **Web Interface**: View and filter logs in CP at Slideshow Manager → Logs
 
-### What's Logged
-
-The plugin logs meaningful events using context arrays for structured data. All logs include user context when available.
-
-#### Settings Operations (SettingsController)
-- **[INFO]** `Settings save requested` - When user initiates settings save
-  - Context: `userId`, `fields` (list of changed fields)
-- **[WARNING]** `Settings validation failed` - When settings fail validation
-  - Context: `errors` (validation error details)
-- **[ERROR]** `Database save failed` - When database update fails
-- **[INFO]** `Settings saved successfully` - When settings save completes
-  - Context: `userId`
-
-#### Settings Model (Settings)
-- **[WARNING]** `Log level "debug" from config file changed to "info"` - When debug level used without devMode
-- **[WARNING]** `Log level automatically changed from "debug" to "info"` - When debug level auto-corrected
-- **[ERROR]** `Failed to load settings from database` - Database query errors
-  - Context: `error` (exception message)
-- **[WARNING]** `No settings found in database` - Missing settings record
-- **[ERROR]** `Settings validation failed` - Settings model validation errors
-  - Context: `errors` (validation errors array)
-- **[DEBUG]** `Saving settings to database` - Database save operation details
-  - Context: `fields` (list of fields being saved)
-- **[ERROR]** `Settings save failed` - Database save errors
-  - Context: `error` (exception message)
-
-#### Field Operations (SlideshowConfigField)
-- **[WARNING]** `Invalid config JSON` - When field contains malformed JSON
-  - Context: `value` (invalid JSON string), `elementId`
-
-**Note:** The field's `normalizeValue()` method is called multiple times per request by Craft (for display, validation, preview, etc.), so normal operations are not logged to prevent log flooding. Only actual errors are logged.
-
 ### Log Management
 Access logs through the Control Panel:
 1. Navigate to Slideshow Manager → Logs
@@ -746,6 +713,8 @@ Access logs through the Control Panel:
 5. Auto-cleanup after 30 days (configurable via Logging Library)
 
 **Requires:** `lindemannrock/logginglibrary` plugin (installed automatically as dependency)
+
+See [docs/LOGGING.md](docs/LOGGING.md) for detailed logging documentation.
 
 ## Troubleshooting
 
