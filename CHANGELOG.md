@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.1...v1.2.2) (2025-10-16)
+
+
+### Bug Fixes
+
+* update installation instructions for Composer and DDEV ([dc02104](https://github.com/LindemannRock/craft-slideshow-manager/commit/dc021048fd69bbbc4f398f2fe77d62ccd8091cf4))
+
 ## [1.2.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.0...v1.2.1) (2025-10-16)
 
 
