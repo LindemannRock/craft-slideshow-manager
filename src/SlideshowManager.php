@@ -61,7 +61,7 @@ class SlideshowManager extends Plugin
         $settings = $this->getSettings();
         LoggingLibrary::configure([
             'pluginHandle' => $this->handle,
-            'pluginName' => $this->name,
+            'pluginName' => $settings->pluginName ?? $this->name,
             'logLevel' => $settings->logLevel ?? 'error',
             'permissions' => ['slideshowManager:viewLogs'],
         ]);
