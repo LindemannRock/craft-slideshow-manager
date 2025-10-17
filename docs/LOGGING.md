@@ -23,11 +23,14 @@ Slideshow Manager uses the [LindemannRock Logging Library](https://github.com/Li
 ```php
 // config/slideshow-manager.php
 return [
-    'logLevel' => 'error', // error, warning, info, or debug
+    'pluginName' => 'Slideshows',  // Optional: Customize plugin name shown in logs interface
+    'logLevel' => 'error',         // error, warning, info, or debug
 ];
 ```
 
-**Note:** Debug level requires Craft's `devMode` to be enabled. If set to debug with devMode disabled, it automatically falls back to info level.
+**Notes:**
+- The `pluginName` setting customizes how the plugin name appears in the log viewer interface (page title, breadcrumbs, etc.). If not set, it defaults to "Slideshow Manager".
+- Debug level requires Craft's `devMode` to be enabled. If set to debug with devMode disabled, it automatically falls back to info level.
 
 ## Log Files
 
@@ -151,6 +154,62 @@ class MyService extends Component
     }
 }
 ```
+
+## Best Practices
+
+### 1. DO NOT Log in init() ⚠️
+
+The `init()` method is called on **every request** (every page load, AJAX call, etc.). Logging there will flood your logs with duplicate entries.
+
+```php
+// ❌ BAD - Causes log flooding
+public function init(): void
+{
+    parent::init();
+    $this->logInfo('Plugin initialized');  // Called on EVERY request!
+}
+
+// ✅ GOOD - Log actual operations
+public function saveSettings(): void
+{
+    $this->logInfo('Settings save requested', ['userId' => $userId]);
+    // ... your logic
+    $this->logInfo('Settings saved successfully', ['userId' => $userId]);
+}
+```
+
+### 2. Always Use Context Arrays
+
+Use the second parameter for variable data, not string concatenation:
+
+```php
+// ❌ BAD - Concatenating variables into message
+$this->logError('Settings save failed: ' . $e->getMessage());
+$this->logInfo('Saved ' . count($fields) . ' fields');
+
+// ✅ GOOD - Use context array for variables
+$this->logError('Settings save failed', ['error' => $e->getMessage()]);
+$this->logInfo('Saved fields', ['count' => count($fields)]);
+```
+
+**Why Context Arrays Are Better:**
+- Structured data for log analysis tools
+- Easier to search and filter in log viewer
+- Consistent formatting across all logs
+- Automatic JSON encoding with UTF-8 support
+
+### 3. Use Appropriate Log Levels
+
+- **debug**: Internal state, variable dumps (requires devMode)
+- **info**: Normal operations, user actions
+- **warning**: Unexpected but handled situations
+- **error**: Actual errors that prevent operation
+
+### 4. Security
+
+- Never log passwords or sensitive data
+- Be careful with user input in log messages
+- Never log API keys, tokens, or credentials
 
 ## Performance Considerations
 
