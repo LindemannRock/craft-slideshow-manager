@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.2...v1.2.3) (2025-10-17)
+
+
+### Bug Fixes
+
+* use settings for plugin name in logging configuration ([a2894ab](https://github.com/LindemannRock/craft-slideshow-manager/commit/a2894ab1726f0b7c2b91d386ac7c02c04a9002d2))
+
 ## [1.2.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.1...v1.2.2) (2025-10-16)
 
 
