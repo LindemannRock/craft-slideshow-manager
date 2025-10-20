@@ -10,8 +10,8 @@ A comprehensive slideshow management plugin with Swiper.js integration for Craft
   - [Features](#features)
   - [Requirements](#requirements)
   - [Installation](#installation)
-    - [Via Composer (Development)](#via-composer-development)
-    - [Via Composer (Production - Coming Soon)](#via-composer-production---coming-soon)
+    - [Via Composer](#via-composer)
+    - [Using DDEV](#using-ddev)
     - [Via Control Panel](#via-control-panel)
   - [Custom Swiper Installation](#custom-swiper-installation)
     - [Option 1: Using npm (Recommended for Production)](#option-1-using-npm-recommended-for-production)
@@ -133,6 +133,7 @@ composer require lindemannrock/craft-slideshow-manager
 
 - Craft CMS 5.0.0 or later
 - PHP 8.2 or later
+- [Logging Library](https://github.com/LindemannRock/craft-logging-library) 5.0 or greater (installed automatically as dependency)
 
 ## Installation
 
