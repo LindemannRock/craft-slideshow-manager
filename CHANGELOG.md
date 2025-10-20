@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.0.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.3...v5.0.1) (2025-10-20)
+
+
+### Miscellaneous Chores
+
+* update logging library dependency to version 5.0 and enhance README with additional badges ([e6362b1](https://github.com/LindemannRock/craft-slideshow-manager/commit/e6362b1a282ad3733a0ae2770b8c051e79dbc517))
+
 ## [1.2.3](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.2...v1.2.3) (2025-10-17)
 
 
