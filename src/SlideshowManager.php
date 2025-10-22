@@ -63,6 +63,7 @@ class SlideshowManager extends Plugin
             'pluginHandle' => $this->handle,
             'pluginName' => $settings->pluginName ?? $this->name,
             'logLevel' => $settings->logLevel ?? 'error',
+            'itemsPerPage' => $settings->itemsPerPage ?? 50,
             'permissions' => ['slideshowManager:viewLogs'],
         ]);
 
