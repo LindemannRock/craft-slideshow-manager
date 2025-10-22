@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.1.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.0.1...v5.1.0) (2025-10-22)
+
+
+### Features
+
+* add itemsPerPage setting to SlideshowManager configuration ([b714db2](https://github.com/LindemannRock/craft-slideshow-manager/commit/b714db26d4cf964a36ac3794dbf7057770c967dd))
+
 ## [5.0.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v1.2.3...v5.0.1) (2025-10-20)
 
 
