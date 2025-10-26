@@ -12,7 +12,6 @@ use Craft;
 use craft\web\Controller;
 use lindemannrock\slideshowmanager\elements\Slide;
 use lindemannrock\slideshowmanager\SlideshowManager;
-use lindemannrock\slideshowmanager\models\Settings;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 
@@ -122,77 +121,95 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
 
+        $request = Craft::$app->getRequest();
         $plugin = SlideshowManager::getInstance();
+        $settings = $plugin->getSettings();
 
-        // Load current settings from database
-        $settings = Settings::loadFromDatabase();
-        if (!$settings) {
-            $settings = new Settings();
-        }
-
-        // Get only the posted settings (fields from the current page)
-        $settingsData = Craft::$app->getRequest()->getBodyParam('settings', []);
+        // Get settings from request (nested under 'settings' key)
+        $postedSettings = $request->getBodyParam('settings', []);
 
         // Log save attempt
         $this->logInfo('Settings save requested', [
             'userId' => Craft::$app->getUser()->getId(),
-            'fields' => array_keys($settingsData),
+            'fields' => array_keys($postedSettings),
         ]);
 
-        // Handle default Swiper config - MERGE with existing, don't replace
-        if (isset($settingsData['defaultSwiperConfig'])) {
-            // Merge posted config with existing
-            $settingsData['defaultSwiperConfig'] = array_replace_recursive(
-                $settings->defaultSwiperConfig,
-                $settingsData['defaultSwiperConfig']
-            );
+        // Only update non-overridden settings
+        if (!$settings->isOverridden('pluginName')) {
+            $settings->pluginName = $postedSettings['pluginName'] ?? $settings->pluginName;
         }
 
-        // Only update fields that were posted and are not overridden by config
-        foreach ($settingsData as $key => $value) {
-            if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
-                // Check for setter method first (handles array conversions, etc.)
-                $setterMethod = 'set' . ucfirst($key);
-                if (method_exists($settings, $setterMethod)) {
-                    $settings->$setterMethod($value);
-                } else {
-                    $settings->$key = $value;
-                }
-            }
+        if (!$settings->isOverridden('autoLoadSwiperCss')) {
+            $settings->autoLoadSwiperCss = isset($postedSettings['autoLoadSwiperCss']) ? (bool)$postedSettings['autoLoadSwiperCss'] : false;
+        }
+
+        if (!$settings->isOverridden('autoLoadSwiperJs')) {
+            $settings->autoLoadSwiperJs = isset($postedSettings['autoLoadSwiperJs']) ? (bool)$postedSettings['autoLoadSwiperJs'] : false;
+        }
+
+        if (!$settings->isOverridden('enableCache')) {
+            $settings->enableCache = isset($postedSettings['enableCache']) ? (bool)$postedSettings['enableCache'] : false;
+        }
+
+        if (!$settings->isOverridden('cacheDuration')) {
+            $settings->cacheDuration = isset($postedSettings['cacheDuration']) ? (int)$postedSettings['cacheDuration'] : $settings->cacheDuration;
+        }
+
+        if (!$settings->isOverriddenByConfig('logLevel')) {
+            $settings->logLevel = $postedSettings['logLevel'] ?? $settings->logLevel;
+        }
+
+        // Handle default Swiper config - MERGE with existing, don't replace
+        if (isset($postedSettings['defaultSwiperConfig'])) {
+            // Merge posted config with existing
+            $settings->defaultSwiperConfig = array_replace_recursive(
+                $settings->defaultSwiperConfig,
+                $postedSettings['defaultSwiperConfig']
+            );
         }
 
         // Validate
         if (!$settings->validate()) {
-            Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
+            $errors = $settings->getErrors();
+            $errorMessage = Craft::t('slideshow-manager', 'Couldn\'t save plugin settings.');
+
+            // Add validation errors to the message
+            if (!empty($errors)) {
+                $errorDetails = [];
+                foreach ($errors as $attribute => $attributeErrors) {
+                    $errorDetails[] = $attribute . ': ' . implode(', ', $attributeErrors);
+                }
+                $errorMessage .= ' ' . implode(' ', $errorDetails);
+            }
 
             // Log validation failure
-            $this->logWarning('Settings validation failed', ['errors' => $settings->getErrors()]);
+            $this->logWarning('Settings validation failed', ['errors' => $errors]);
 
-            // Get the section to re-render the correct template with errors
-            $section = $this->request->getBodyParam('section', 'general');
-            $template = "slideshow-manager/settings/{$section}";
+            Craft::$app->getSession()->setError($errorMessage);
 
-            return $this->renderTemplate($template, [
-                'settings' => $settings,
-            ]);
-        }
-
-        // Save settings to database
-        if ($settings->saveToDatabase()) {
-            // Update the plugin's cached settings (CRITICAL - forces Craft to refresh)
-            $plugin->setSettings($settings->getAttributes());
-
-            // Log successful save
-            $this->logInfo('Settings saved successfully', [
-                'userId' => Craft::$app->getUser()->getId(),
+            Craft::$app->getUrlManager()->setRouteParams([
+                'settings' => $settings
             ]);
 
-            Craft::$app->getSession()->setNotice(Craft::t('slideshow-manager', 'Settings saved successfully'));
-        } else {
-            $this->logError('Database save failed');
-            Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings'));
             return null;
         }
+
+        // Save to database using the new method
+        if (!$settings->saveToDatabase()) {
+            $this->logError('Database save failed');
+            Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Couldn\'t save plugin settings.'));
+            return null;
+        }
+
+        // Force reload settings from database to clear Craft's internal cache
+        $plugin->reloadSettings();
+
+        // Log successful save
+        $this->logInfo('Settings saved successfully', [
+            'userId' => Craft::$app->getUser()->getId(),
+        ]);
+
+        Craft::$app->getSession()->setNotice(Craft::t('slideshow-manager', 'Plugin settings saved.'));
 
         return $this->redirectToPostedUrl();
     }

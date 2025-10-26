@@ -28,8 +28,8 @@
         name: 'settings[pluginName]',
         value: settings.pluginName ?? 'Slideshow Manager',
         placeholder: 'Slideshow Manager',
-        warning: settings.isOverridden('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
-        disabled: settings.isOverridden('pluginName'),
+        warning: settings.isOverriddenByConfig('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverriddenByConfig('pluginName'),
         fieldAttributes: {
             style: 'margin-top: 0;'
         }
@@ -45,8 +45,8 @@
         id: 'autoLoadSwiperCss',
         name: 'settings[autoLoadSwiperCss]',
         on: settings.autoLoadSwiperCss,
-        warning: settings.isOverridden('autoLoadSwiperCss') ? 'This is being overridden by the `autoLoadSwiperCss` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
-        disabled: settings.isOverridden('autoLoadSwiperCss')
+        warning: settings.isOverriddenByConfig('autoLoadSwiperCss') ? 'This is being overridden by the `autoLoadSwiperCss` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverriddenByConfig('autoLoadSwiperCss')
     }) }}
 
     {{ forms.lightswitchField({
@@ -55,8 +55,8 @@
         id: 'autoLoadSwiperJs',
         name: 'settings[autoLoadSwiperJs]',
         on: settings.autoLoadSwiperJs,
-        warning: settings.isOverridden('autoLoadSwiperJs') ? 'This is being overridden by the `autoLoadSwiperJs` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
-        disabled: settings.isOverridden('autoLoadSwiperJs')
+        warning: settings.isOverriddenByConfig('autoLoadSwiperJs') ? 'This is being overridden by the `autoLoadSwiperJs` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverriddenByConfig('autoLoadSwiperJs')
     }) }}
 
     <hr>
@@ -69,8 +69,8 @@
         id: 'enableCache',
         name: 'settings[enableCache]',
         on: settings.enableCache,
-        warning: settings.isOverridden('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
-        disabled: settings.isOverridden('enableCache')
+        warning: settings.isOverriddenByConfig('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverriddenByConfig('enableCache')
     }) }}
 
     {{ forms.textField({
@@ -81,8 +81,8 @@
         value: settings.cacheDuration,
         type: 'number',
         min: 0,
-        warning: settings.isOverridden('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
-        disabled: settings.isOverridden('cacheDuration')
+        warning: settings.isOverriddenByConfig('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
+        disabled: settings.isOverriddenByConfig('cacheDuration')
     }) }}
 
     <hr>
