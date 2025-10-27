@@ -1,5 +1,11 @@
 # Slideshow Manager for Craft CMS
 
+[![Latest Version](https://img.shields.io/packagist/v/lindemannrock/craft-slideshow-manager.svg)](https://packagist.org/packages/lindemannrock/craft-slideshow-manager)
+[![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.0%2B-orange.svg)](https://craftcms.com/)
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://php.net/)
+[![Logging Library](https://img.shields.io/badge/Logging%20Library-5.0%2B-green.svg)](https://github.com/LindemannRock/craft-logging-library)
+[![License](https://img.shields.io/packagist/l/lindemannrock/craft-slideshow-manager.svg)](LICENSE)
+
 A comprehensive slideshow management plugin with Swiper.js integration for Craft CMS 5.x.
 
 ## Table of Contents
@@ -274,6 +280,10 @@ Settings can be configured in the Control Panel at **Slideshow Manager → Setti
 
 Create a `config/slideshow-manager.php` file to override default settings:
 
+```bash
+cp vendor/lindemannrock/craft-slideshow-manager/src/config.php config/slideshow-manager.php
+```
+
 ```php
 <?php
 
@@ -377,6 +387,8 @@ return [
     ],
 ];
 ```
+
+See [Configuration Documentation](docs/CONFIGURATION.md) for all available options.
 
 ## Usage
 
@@ -676,7 +688,7 @@ Includes examples for:
 
 ## Logging
 
-Slideshow Manager uses the [LindemannRock Logging Library](https://github.com/LindemannRock/craft-logging-library) for centralized, structured logging across all LindemannRock plugins.
+Slideshow Manager uses the [LindemannRock Logging Library](https://github.com/LindemannRock/craft-logging-library) for centralized logging.
 
 ### Log Levels
 - **Error**: Critical errors only (default)

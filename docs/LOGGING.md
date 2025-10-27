@@ -55,11 +55,16 @@ The plugin logs meaningful events using context arrays for structured data. All 
 
 ### Settings Model (Settings)
 
-- **[WARNING]** `Log level "debug" from config file changed to "info"` - When debug level used without devMode (config override)
-- **[WARNING]** `Log level automatically changed from "debug" to "info"` - When debug level auto-corrected (DB setting)
+#### Log Level Adjustments
+- **[WARNING]** `Log level "debug" from config file changed to "info" because devMode is disabled. Please update your config/slideshow-manager.php file.` - When debug level used without devMode (config override)
+- **[WARNING]** `Log level automatically changed from "debug" to "info" because devMode is disabled. This setting has been saved.` - When debug level auto-corrected (DB setting)
+
+#### Loading Operations
 - **[ERROR]** `Failed to load settings from database` - Database query errors
   - Context: `error` (exception message)
 - **[WARNING]** `No settings found in database` - Missing settings record
+
+#### Validation & Save Operations
 - **[ERROR]** `Settings validation failed` - Settings model validation errors
   - Context: `errors` (validation errors array)
 - **[DEBUG]** `Saving settings to database` - Database save operation details
