@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.2.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.1.0...v5.2.0) (2025-10-27)
+
+
+### Features
+
+* refactor settings handling in SettingsController and update template warnings ([5685fa3](https://github.com/LindemannRock/craft-slideshow-manager/commit/5685fa36a7a4dcb23a62a43c30d5d5b39f2a9439))
+
+
+### Bug Fixes
+
+* update README and logging documentation with new log level adjustments and additional configuration details ([40cbd7d](https://github.com/LindemannRock/craft-slideshow-manager/commit/40cbd7d5696214fe7eeb0098cdba359d428ffa8d))
+
 ## [5.1.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.0.1...v5.1.0) (2025-10-22)
 
 
