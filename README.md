@@ -147,7 +147,13 @@ composer require lindemannrock/craft-slideshow-manager
 
 ```bash
 cd /path/to/project
+```
+
+```bash
 composer require lindemannrock/craft-slideshow-manager
+```
+
+```bash
 ./craft plugin/install slideshow-manager
 ```
 
@@ -155,7 +161,13 @@ composer require lindemannrock/craft-slideshow-manager
 
 ```bash
 cd /path/to/project
+```
+
+```bash
 ddev composer require lindemannrock/craft-slideshow-manager
+```
+
+```bash
 ddev craft plugin/install slideshow-manager
 ```
 
