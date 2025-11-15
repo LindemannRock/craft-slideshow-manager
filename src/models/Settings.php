@@ -417,4 +417,31 @@ class Settings extends Model
     {
         return $this->_overriddenSettings;
     }
+
+    public function getDisplayName(): string
+    {
+        $name = str_replace([' Manager', ' manager'], '', $this->pluginName);
+        $singular = preg_replace('/s$/', '', $name) ?: $name;
+        return $singular;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->pluginName;
+    }
+
+    public function getPluralDisplayName(): string
+    {
+        return str_replace([' Manager', ' manager'], '', $this->pluginName);
+    }
+
+    public function getLowerDisplayName(): string
+    {
+        return strtolower($this->getDisplayName());
+    }
+
+    public function getPluralLowerDisplayName(): string
+    {
+        return strtolower($this->getPluralDisplayName());
+    }
 }

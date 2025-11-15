@@ -13,6 +13,12 @@
 {% set selectedSubnavItem = 'settings' %}
 {% set fullPageForm = true %}
 
+{% set crumbs = [
+    { label: slideshowHelper.fullName|t('slideshow-manager'), url: url('slideshow-manager') },
+    { label: 'Settings'|t('slideshow-manager'), url: url('slideshow-manager/settings') },
+    { label: 'Basic'|t('slideshow-manager'), url: url('slideshow-manager/settings/basic') },
+] %}
+
 {% block content %}
     <form method="post" accept-charset="UTF-8">
         {{ actionInput('slideshow-manager/settings/save') }}

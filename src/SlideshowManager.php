@@ -46,6 +46,11 @@ class SlideshowManager extends Plugin
 {
     use LoggingTrait;
 
+    /**
+     * @var SlideshowManager|null
+     */
+    public static ?SlideshowManager $plugin = null;
+
     public string $schemaVersion = '1.0.0';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = true;
@@ -56,6 +61,7 @@ class SlideshowManager extends Plugin
     public function init(): void
     {
         parent::init();
+        self::$plugin = $this;
 
         // Configure logging for this plugin
         $settings = $this->getSettings();
@@ -80,6 +86,9 @@ class SlideshowManager extends Plugin
 
         $this->_registerCpRoutes();
         $this->_registerFieldTypes();
+        // Register Twig extension for plugin name helpers
+        Craft::$app->view->registerTwigExtension(new \lindemannrock\slideshowmanager\twigextensions\PluginNameExtension());
+
         $this->_registerVariables();
         $this->_registerTemplateRoots();
         $this->_registerPermissions();

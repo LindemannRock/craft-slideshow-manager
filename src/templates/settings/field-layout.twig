@@ -5,6 +5,12 @@
 {% set selectedSettingsItem = 'field-layout' %}
 {% set fullPageForm = true %}
 
+{% set crumbs = [
+    { label: slideshowHelper.fullName|t('slideshow-manager'), url: url('slideshow-manager') },
+    { label: 'Settings'|t('slideshow-manager'), url: url('slideshow-manager/settings') },
+    { label: 'Field Layout'|t('slideshow-manager'), url: url('slideshow-manager/settings/field-layout') },
+] %}
+
 {% block content %}
     {{ actionInput('slideshow-manager/settings/save-field-layout') }}
     {{ redirectInput('slideshow-manager/settings/field-layout') }}
