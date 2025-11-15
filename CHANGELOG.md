@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.3.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.2.0...v5.3.0) (2025-11-15)
+
+
+### Features
+
+* add MIT License file to the repository ([e63c717](https://github.com/LindemannRock/craft-slideshow-manager/commit/e63c7178afacec72dee969a97ea9b90cb8ae65e3))
+* enhance plugin settings with display name helpers and update Twig templates for breadcrumbs ([d202b1d](https://github.com/LindemannRock/craft-slideshow-manager/commit/d202b1d9583f895f78f977bc3ad7ef83bf985de2))
+
 ## [5.2.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.1.0...v5.2.0) (2025-10-27)
 
 
