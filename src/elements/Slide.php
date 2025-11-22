@@ -43,6 +43,26 @@ class Slide extends Element
     public int $sortOrder = 0;
 
     /**
+     * @var string|null Slide title text
+     */
+    public ?string $title = null;
+
+    /**
+     * @var string|null Slide description or body text
+     */
+    public ?string $description = null;
+
+    /**
+     * @var string|null Slide category/label
+     */
+    public ?string $category = null;
+
+    /**
+     * @var array|null Structured slide content payload
+     */
+    public ?array $content = null;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string

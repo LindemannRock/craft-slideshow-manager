@@ -47,12 +47,23 @@ class SlideshowManager extends Plugin
     use LoggingTrait;
 
     /**
-     * @var SlideshowManager|null
+     * @var SlideshowManager|null Singleton plugin instance
      */
     public static ?SlideshowManager $plugin = null;
 
+    /**
+     * @var string Plugin schema version for migrations
+     */
     public string $schemaVersion = '1.0.0';
+
+    /**
+     * @var bool Whether the plugin exposes a control panel settings page
+     */
     public bool $hasCpSettings = true;
+
+    /**
+     * @var bool Whether the plugin registers a control panel section
+     */
     public bool $hasCpSection = true;
 
     /**
