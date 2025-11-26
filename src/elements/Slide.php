@@ -121,7 +121,7 @@ class Slide extends Element
     /**
      * @inheritdoc
      */
-    protected static function defineSources(string $context = null): array
+    protected static function defineSources(?string $context = null): array
     {
         return [
             [
@@ -135,7 +135,7 @@ class Slide extends Element
     /**
      * @inheritdoc
      */
-    protected static function defineActions(string $source = null): array
+    protected static function defineActions(?string $source = null): array
     {
         return [
             Delete::class,
