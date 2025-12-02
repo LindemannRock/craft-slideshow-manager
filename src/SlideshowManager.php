@@ -11,25 +11,23 @@
 namespace lindemannrock\slideshowmanager;
 
 use Craft;
-use craft\base\Plugin;
 use craft\base\Model;
-use craft\base\Element;
-use craft\events\ModelEvent;
+use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\services\Fields;
 use craft\services\UserPermissions;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
-use craft\web\twig\variables\CraftVariable;
-use lindemannrock\slideshowmanager\fields\SlideshowField;
+use lindemannrock\logginglibrary\LoggingLibrary;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\slideshowmanager\fields\SlideshowConfigField;
+use lindemannrock\slideshowmanager\fields\SlideshowField;
 use lindemannrock\slideshowmanager\models\Settings;
 use lindemannrock\slideshowmanager\variables\SlideshowVariable;
-use lindemannrock\logginglibrary\traits\LoggingTrait;
-use lindemannrock\logginglibrary\LoggingLibrary;
 use yii\base\Event;
 
 /**
@@ -177,7 +175,7 @@ class SlideshowManager extends Plugin
             if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
                 Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
                 $item = LoggingLibrary::addLogsNav($item, $this->handle, [
-                    'slideshowManager:viewLogs'
+                    'slideshowManager:viewLogs',
                 ]);
             }
         }
@@ -310,5 +308,4 @@ class SlideshowManager extends Plugin
             }
         );
     }
-
 }

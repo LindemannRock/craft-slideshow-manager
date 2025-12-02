@@ -12,13 +12,11 @@ use Craft;
 use craft\base\Element;
 use craft\elements\actions\Delete;
 use craft\elements\actions\Restore;
-use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use lindemannrock\slideshowmanager\elements\db\SlideQuery;
 use lindemannrock\slideshowmanager\records\SlideRecord;
-use lindemannrock\slideshowmanager\SlideshowManager;
 
 /**
  * Slide element

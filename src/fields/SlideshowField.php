@@ -8,10 +8,8 @@
 
 namespace lindemannrock\slideshowmanager\fields;
 
-use Craft;
 use craft\base\ElementInterface;
 use craft\fields\Matrix;
-use craft\helpers\ArrayHelper;
 use lindemannrock\slideshowmanager\SlideshowManager;
 
 /**

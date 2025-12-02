@@ -8,7 +8,6 @@
 
 namespace lindemannrock\slideshowmanager\models;
 
-use Craft;
 use craft\base\Model;
 use craft\helpers\Json;
 use craft\helpers\Template;

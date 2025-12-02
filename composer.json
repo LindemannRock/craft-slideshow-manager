@@ -36,10 +36,18 @@
         "craftcms/cms": "^5.0.0",
         "lindemannrock/craft-logging-library": "^5.0"
     },
+    "require-dev": {
+        "craftcms/phpstan": "dev-main"
+    },
     "autoload": {
         "psr-4": {
             "lindemannrock\\slideshowmanager\\": "src/"
         }
+    },
+    "scripts": {
+        "phpstan": "phpstan --ansi --memory-limit=1G",
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --fix --ansi"
     },
     "extra": {
         "name": "Slideshow Manager",

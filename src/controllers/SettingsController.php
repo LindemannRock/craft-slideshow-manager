@@ -10,10 +10,9 @@ namespace lindemannrock\slideshowmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
-use lindemannrock\slideshowmanager\elements\Slide;
-use lindemannrock\slideshowmanager\SlideshowManager;
-use lindemannrock\slideshowmanager\models\Settings;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\slideshowmanager\models\Settings;
+use lindemannrock\slideshowmanager\SlideshowManager;
 use yii\web\Response;
 
 /**

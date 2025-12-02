@@ -10,9 +10,8 @@ namespace lindemannrock\slideshowmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
-use lindemannrock\slideshowmanager\elements\Slide;
-use lindemannrock\slideshowmanager\SlideshowManager;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\slideshowmanager\SlideshowManager;
 use yii\web\Response;
 
 /**
@@ -188,7 +187,7 @@ class SettingsController extends Controller
             Craft::$app->getSession()->setError($errorMessage);
 
             Craft::$app->getUrlManager()->setRouteParams([
-                'settings' => $settings
+                'settings' => $settings,
             ]);
 
             return null;

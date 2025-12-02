@@ -76,7 +76,7 @@ class SlideshowVariable
             'threshold',
             'touchRatio',
             'allowTouchMove',
-            'simulateTouch'
+            'simulateTouch',
         ];
 
         foreach ($simpleValues as $key) {
@@ -155,7 +155,7 @@ class SlideshowVariable
             'parallax',
             'zoom',
             'virtual',
-            'a11y'
+            'a11y',
         ];
 
         foreach ($moduleSettings as $module) {
@@ -175,7 +175,7 @@ class SlideshowVariable
      */
     public function getVisibilityClasses(string $visibility): string
     {
-        return match($visibility) {
+        return match ($visibility) {
             'hide-mobile' => 'hidden md:block',
             'hide-desktop' => 'block md:hidden',
             'mobile-only' => 'block md:hidden',

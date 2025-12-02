@@ -23,10 +23,10 @@ class Slide extends Model implements \JsonSerializable
     /**
      * Slide content types
      */
-    const TYPE_RICH_TEXT = 'richText';
-    const TYPE_IMAGE = 'image';
-    const TYPE_ENTRY = 'entry';
-    const TYPE_HTML = 'html';
+    public const TYPE_RICH_TEXT = 'richText';
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_ENTRY = 'entry';
+    public const TYPE_HTML = 'html';
 
     /**
      * @var string Slide type

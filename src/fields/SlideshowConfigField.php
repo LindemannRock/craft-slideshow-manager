@@ -12,8 +12,8 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\helpers\Json;
-use lindemannrock\slideshowmanager\SlideshowManager;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\slideshowmanager\SlideshowManager;
 
 /**
  * Slideshow Config Field
