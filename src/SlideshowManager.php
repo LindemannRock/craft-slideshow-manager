@@ -88,7 +88,7 @@ class SlideshowManager extends Plugin
             $this->name = $configFileSettings['pluginName'];
         } else {
             // Get from database settings
-            if ($settings && !empty($settings->pluginName)) {
+            if (!empty($settings->pluginName)) {
                 $this->name = $settings->pluginName;
             }
         }

@@ -125,9 +125,6 @@ class SettingsController extends Controller
 
         // Load current settings from database
         $settings = Settings::loadFromDatabase();
-        if (!$settings) {
-            $settings = new Settings();
-        }
 
         // Get only the posted settings (fields from the current page)
         $settingsData = Craft::$app->getRequest()->getBodyParam('settings', []);
