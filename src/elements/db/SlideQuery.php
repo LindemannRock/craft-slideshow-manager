@@ -13,6 +13,8 @@ use craft\helpers\Db;
 
 /**
  * Slide Query
+ *
+ * @since 1.0.0
  */
 class SlideQuery extends ElementQuery
 {

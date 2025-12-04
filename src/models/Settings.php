@@ -17,6 +17,8 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
  * Slideshow Manager Settings Model
+ *
+ * @since 1.0.0
  */
 class Settings extends Model
 {

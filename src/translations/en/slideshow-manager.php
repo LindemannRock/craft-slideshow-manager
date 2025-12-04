@@ -8,6 +8,8 @@
 
 /**
  * English translations
+ *
+ * @since 1.0.0
  */
 return [
     // Plugin

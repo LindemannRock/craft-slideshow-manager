@@ -22,6 +22,8 @@ use lindemannrock\slideshowmanager\records\SlideRecord;
  * Slide element
  *
  * Represents a single slide in a slideshow with customizable fields
+ *
+ * @since 1.0.0
  */
 class Slide extends Element
 {

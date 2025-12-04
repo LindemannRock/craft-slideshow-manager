@@ -18,6 +18,8 @@ use Twig\Markup;
  * Slideshow Model
  *
  * Represents a collection of slides with configuration
+ *
+ * @since 1.0.0
  */
 class Slideshow extends Model implements \JsonSerializable
 {

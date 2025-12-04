@@ -16,6 +16,8 @@ use Twig\Markup;
  * Slideshow Variable
  *
  * Provides template-level access to slideshow functionality
+ *
+ * @since 1.0.0
  */
 class SlideshowVariable
 {

@@ -17,6 +17,8 @@ use lindemannrock\slideshowmanager\SlideshowManager;
  *
  * Simple Matrix field wrapper for managing slides
  * Configuration is handled by the separate SlideshowConfigField
+ *
+ * @since 1.0.0
  */
 class SlideshowField extends Matrix
 {

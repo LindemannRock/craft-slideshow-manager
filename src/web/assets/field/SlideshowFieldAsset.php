@@ -15,6 +15,8 @@ use craft\web\assets\cp\CpAsset;
  * Slideshow Field Asset Bundle
  *
  * Asset bundle for the CP field interface
+ *
+ * @since 1.0.0
  */
 class SlideshowFieldAsset extends AssetBundle
 {

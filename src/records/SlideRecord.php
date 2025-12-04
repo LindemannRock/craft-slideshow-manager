@@ -20,6 +20,7 @@ use yii\db\ActiveQueryInterface;
  * @property int|null $ownerId
  * @property int $sortOrder
  * @property Element $element
+ * @since 1.0.0
  */
 class SlideRecord extends ActiveRecord
 {

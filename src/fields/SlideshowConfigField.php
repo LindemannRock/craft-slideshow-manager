@@ -19,6 +19,8 @@ use lindemannrock\slideshowmanager\SlideshowManager;
  * Slideshow Config Field
  *
  * Stores Swiper configuration for slideshows
+ *
+ * @since 1.0.0
  */
 class SlideshowConfigField extends Field
 {
