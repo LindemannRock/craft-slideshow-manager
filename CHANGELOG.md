@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.4.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.3.0...v5.4.0) (2025-12-04)
+
+
+### Features
+
+* add PHPStan and EasyCodingStandard configurations, enhance plugin settings, and clean up code ([498ca9b](https://github.com/LindemannRock/craft-slideshow-manager/commit/498ca9b62ac54dc4b811bbb29dcfca52117db7ad))
+* add properties for slide details including title, description, category, and content ([f9ea334](https://github.com/LindemannRock/craft-slideshow-manager/commit/f9ea33408df7fbaafed54ed16d752a5af86c8cfe))
+
+
+### Bug Fixes
+
+* simplify settings loading logic in SettingsController ([1b5682a](https://github.com/LindemannRock/craft-slideshow-manager/commit/1b5682a462ffe5ef2cc17bfe3f047e2e6bfdfba3))
+* update method signatures to allow nullable context parameters in defineSources and defineActions ([c699807](https://github.com/LindemannRock/craft-slideshow-manager/commit/c699807e399e0462149036b2aae2430011e7d0f8))
+
+
+### Miscellaneous Chores
+
+* add [@since](https://github.com/since) 1.0.0 annotation to multiple files for versioning clarity ([13da821](https://github.com/LindemannRock/craft-slideshow-manager/commit/13da8215ec87bbc1a56b67950b9d879b4b949527))
+
 ## [5.3.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.2.0...v5.3.0) (2025-11-15)
 
 
