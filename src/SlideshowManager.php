@@ -22,6 +22,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\slideshowmanager\fields\SlideshowConfigField;
@@ -71,6 +72,9 @@ class SlideshowManager extends Plugin
     {
         parent::init();
         self::$plugin = $this;
+
+        // Bootstrap the base plugin helper
+        PluginHelper::bootstrap($this, 'slideshowManagerHelper');
 
         // Configure logging for this plugin
         $settings = $this->getSettings();

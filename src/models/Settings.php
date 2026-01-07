@@ -10,9 +10,9 @@ namespace lindemannrock\slideshowmanager\models;
 
 use Craft;
 use craft\base\Model;
-use craft\db\Query;
-use craft\helpers\Db;
-use craft\helpers\Json;
+use lindemannrock\base\traits\SettingsConfigTrait;
+use lindemannrock\base\traits\SettingsDisplayNameTrait;
+use lindemannrock\base\traits\SettingsPersistenceTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
@@ -23,11 +23,9 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
 class Settings extends Model
 {
     use LoggingTrait;
-
-    /**
-     * @var array Track which settings are overridden by config
-     */
-    private array $_overriddenSettings = [];
+    use SettingsConfigTrait;
+    use SettingsDisplayNameTrait;
+    use SettingsPersistenceTrait;
 
     /**
      * @var string|null The public-facing name of the plugin
@@ -167,283 +165,64 @@ class Settings extends Model
         }
     }
 
+    // =========================================================================
+    // Trait Configuration Methods
+    // =========================================================================
+
     /**
-     * @inheritdoc
+     * Database table name for settings storage
      */
-    public function __construct($config = [])
+    protected static function tableName(): string
     {
-        // Get config file overrides
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('slideshow-manager');
-
-        // Merge config file settings with defaults
-        if ($configFileSettings) {
-            $config = array_merge($configFileSettings, $config);
-        }
-
-        parent::__construct($config);
+        return 'slideshowmanager_settings';
     }
 
     /**
-     * Load settings from database
-     *
-     * @param Settings|null $settings Optional existing settings instance
-     * @return self
+     * Plugin handle for config file resolution
      */
-    public static function loadFromDatabase(?Settings $settings = null): self
+    protected static function pluginHandle(): string
     {
-        if ($settings === null) {
-            $settings = new self();
-        }
-
-        // Load from database
-        try {
-            $row = (new Query())
-                ->from('{{%slideshowmanager_settings}}')
-                ->where(['id' => 1])
-                ->one();
-        } catch (\Exception $e) {
-            $settings->logError('Failed to load settings from database', ['error' => $e->getMessage()]);
-            return $settings;
-        }
-
-        if ($row) {
-            // Remove system fields that aren't attributes
-            unset($row['id'], $row['dateCreated'], $row['dateUpdated'], $row['uid']);
-
-            // Convert numeric boolean values to actual booleans
-            $booleanFields = ['autoLoadSwiperCss', 'autoLoadSwiperJs', 'enableCache'];
-            foreach ($booleanFields as $field) {
-                if (isset($row[$field])) {
-                    $row[$field] = (bool) $row[$field];
-                }
-            }
-
-            // Convert numeric values to integers
-            $integerFields = ['cacheDuration'];
-            foreach ($integerFields as $field) {
-                if (isset($row[$field])) {
-                    $row[$field] = (int) $row[$field];
-                }
-            }
-
-            // Decode JSON fields
-            if (isset($row['defaultSwiperConfig'])) {
-                $row['defaultSwiperConfig'] = Json::decode($row['defaultSwiperConfig']);
-            }
-            if (isset($row['swiperCssVars'])) {
-                $row['swiperCssVars'] = Json::decode($row['swiperCssVars']);
-            }
-
-            // Set attributes from database
-            $settings->setAttributes($row, false);
-        } else {
-            $settings->logWarning('No settings found in database');
-        }
-
-        // Apply config file overrides
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('slideshow-manager');
-        if ($configFileSettings) {
-            // Track which settings are overridden
-            foreach ($configFileSettings as $setting => $value) {
-                if (property_exists($settings, $setting)) {
-                    $settings->_overriddenSettings[] = $setting;
-
-                    // For defaultSwiperConfig and swiperCssVars, do a deep merge instead of replace
-                    if (in_array($setting, ['defaultSwiperConfig', 'swiperCssVars']) && is_array($value) && is_array($settings->$setting)) {
-                        $settings->$setting = array_replace_recursive($settings->$setting, $value);
-                    } else {
-                        $settings->$setting = $value;
-                    }
-                }
-            }
-        }
-
-        // Validate settings
-        if (!$settings->validate()) {
-            $settings->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
-        }
-
-        return $settings;
+        return 'slideshow-manager';
     }
 
     /**
-     * Save settings to database
-     *
-     * @return bool
+     * Fields that should be cast to boolean
      */
-    public function saveToDatabase(): bool
+    protected static function booleanFields(): array
     {
-        if (!$this->validate()) {
-            return false;
-        }
-
-        $db = Craft::$app->getDb();
-
-        // For defaultSwiperConfig and swiperCssVars, we need to strip out config file overrides before saving
-        $configToSave = $this->defaultSwiperConfig;
-        $cssVarsToSave = $this->swiperCssVars;
-
-        // Load the config file to see what's overridden
-        $configPath = Craft::$app->getPath()->getConfigPath() . '/slideshow-manager.php';
-        if (file_exists($configPath)) {
-            $configFileSettings = require $configPath;
-
-            // If defaultSwiperConfig exists in config file, we need to remove those overridden values
-            if (isset($configFileSettings['defaultSwiperConfig'])) {
-                $configToSave = $this->removeOverriddenValues($configToSave, $configFileSettings['defaultSwiperConfig']);
-            }
-
-            // If swiperCssVars exists in config file, we need to remove those overridden values
-            if (isset($configFileSettings['swiperCssVars'])) {
-                $cssVarsToSave = $this->removeOverriddenValues($cssVarsToSave, $configFileSettings['swiperCssVars']);
-            }
-        }
-
-        // Build the attributes to save
-        $attributes = [
-            'pluginName' => $this->pluginName,
-            'autoLoadSwiperCss' => $this->autoLoadSwiperCss,
-            'autoLoadSwiperJs' => $this->autoLoadSwiperJs,
-            'defaultSwiperConfig' => Json::encode($configToSave),
-            'swiperCssVars' => Json::encode($cssVarsToSave),
-            'enableCache' => $this->enableCache,
-            'cacheDuration' => $this->cacheDuration,
-            'logLevel' => $this->logLevel,
-            'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
+        return [
+            'autoLoadSwiperCss',
+            'autoLoadSwiperJs',
+            'enableCache',
         ];
-
-        $this->logDebug('Saving settings to database', ['fields' => array_keys($attributes)]);
-
-        // Update existing settings (we know there's always one row from migration)
-        try {
-            $result = $db->createCommand()
-                ->update('{{%slideshowmanager_settings}}', $attributes, ['id' => 1])
-                ->execute();
-
-            return $result !== false;
-        } catch (\Exception $e) {
-            $this->logError('Settings save failed', ['error' => $e->getMessage()]);
-            return false;
-        }
     }
 
     /**
-     * Remove config file overridden values from an array
-     * This ensures we don't save config file values to the database
-     *
-     * @param array $data The data to clean
-     * @param array $configOverrides The config file overrides
-     * @return array
+     * Fields that should be cast to integer
      */
-    private function removeOverriddenValues(array $data, array $configOverrides): array
+    protected static function integerFields(): array
     {
-        foreach ($configOverrides as $key => $value) {
-            if (array_key_exists($key, $data)) {
-                // If the key exists in config, remove it entirely from database save
-                // Don't try to merge - config file value will be used on load
-                unset($data[$key]);
-            }
-        }
-        return $data;
+        return [
+            'cacheDuration',
+        ];
     }
 
     /**
-     * Check if a setting is overridden by config file
-     *
-     * @param string $setting
-     * @return bool
+     * Fields that should be JSON encoded/decoded
      */
-    public function isOverridden(string $setting): bool
+    protected static function jsonFields(): array
     {
-        return in_array($setting, $this->_overriddenSettings, true);
+        return [
+            'defaultSwiperConfig',
+            'swiperCssVars',
+        ];
     }
 
     /**
-     * Check if a setting is overridden by config file
-     * Supports dot notation for nested settings like: defaultSwiperConfig.navigation
-     *
-     * @param string $attribute Attribute name or dot-notation path
-     * @return bool
+     * Fields to exclude from database save
      */
-    public function isOverriddenByConfig(string $attribute): bool
+    protected static function excludeFromSave(): array
     {
-        $configPath = Craft::$app->getPath()->getConfigPath() . '/slideshow-manager.php';
-
-        if (!file_exists($configPath)) {
-            return false;
-        }
-
-        // Load the raw config file
-        $rawConfig = require $configPath;
-
-        // Handle dot notation for nested config
-        if (str_contains($attribute, '.')) {
-            $parts = explode('.', $attribute);
-            $current = $rawConfig;
-
-            foreach ($parts as $part) {
-                if (!is_array($current) || !array_key_exists($part, $current)) {
-                    return false;
-                }
-                $current = $current[$part];
-            }
-
-            return true;
-        }
-
-        // Simple attribute check
-        if (array_key_exists($attribute, $rawConfig)) {
-            return true;
-        }
-
-        // Check environment-specific configs
-        $env = Craft::$app->getConfig()->env;
-        if ($env && is_array($rawConfig[$env] ?? null) && array_key_exists($attribute, $rawConfig[$env])) {
-            return true;
-        }
-
-        // Check wildcard config
-        if (is_array($rawConfig['*'] ?? null) && array_key_exists($attribute, $rawConfig['*'])) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get all overridden settings
-     *
-     * @return array
-     */
-    public function getOverriddenSettings(): array
-    {
-        return $this->_overriddenSettings;
-    }
-
-    public function getDisplayName(): string
-    {
-        $name = str_replace([' Manager', ' manager'], '', $this->pluginName);
-        $singular = preg_replace('/s$/', '', $name) ?: $name;
-        return $singular;
-    }
-
-    public function getFullName(): string
-    {
-        return $this->pluginName;
-    }
-
-    public function getPluralDisplayName(): string
-    {
-        return str_replace([' Manager', ' manager'], '', $this->pluginName);
-    }
-
-    public function getLowerDisplayName(): string
-    {
-        return strtolower($this->getDisplayName());
-    }
-
-    public function getPluralLowerDisplayName(): string
-    {
-        return strtolower($this->getPluralDisplayName());
+        return [];
     }
 }
