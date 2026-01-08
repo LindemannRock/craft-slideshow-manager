@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.5.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.4.0...v5.5.0) (2026-01-08)
+
+
+### Features
+
+* Migrate to shared base plugin (lindemannrock/craft-plugin-base) ([d237151](https://github.com/LindemannRock/craft-slideshow-manager/commit/d237151412f2c2672938d0b8d5310d3c9d3ecbfa))
+
+
+### Bug Fixes
+
+* update success message for settings save confirmation ([318efc3](https://github.com/LindemannRock/craft-slideshow-manager/commit/318efc3823a5f093274d262c9944bf34aed15097))
+
 ## [5.4.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.3.0...v5.4.0) (2025-12-04)
 
 
