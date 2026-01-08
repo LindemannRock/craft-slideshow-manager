@@ -185,7 +185,7 @@ class SettingsController extends Controller
                 'userId' => Craft::$app->getUser()->getId(),
             ]);
 
-            Craft::$app->getSession()->setNotice(Craft::t('slideshow-manager', 'Settings saved successfully'));
+            Craft::$app->getSession()->setNotice(Craft::t('slideshow-manager', 'Settings saved.'));
         } else {
             $this->logError('Database save failed');
             Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings'));
