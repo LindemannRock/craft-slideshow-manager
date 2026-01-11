@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.5.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.1...v5.5.2) (2026-01-11)
+
+
+### Bug Fixes
+
+* update pluginName property to be non-nullable with a default value ([2f57e18](https://github.com/LindemannRock/craft-slideshow-manager/commit/2f57e18ae7f5bc8b625502e5dfba68f40e6cde40))
+
 ## [5.5.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.0...v5.5.1) (2026-01-11)
 
 
