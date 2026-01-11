@@ -28,9 +28,9 @@ class Settings extends Model
     use SettingsPersistenceTrait;
 
     /**
-     * @var string|null The public-facing name of the plugin
+     * @var string The public-facing name of the plugin
      */
-    public ?string $pluginName = 'Slideshow Manager';
+    public string $pluginName = 'Slideshow Manager';
 
     /**
      * @var bool Whether to load Swiper CSS automatically
