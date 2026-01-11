@@ -89,7 +89,7 @@ class Install extends Migration
             'id' => $this->primaryKey(),
 
             // Plugin settings
-            'pluginName' => $this->string()->null(),
+            'pluginName' => $this->string()->notNull()->defaultValue('Slideshow Manager'),
 
             // Asset loading settings
             'autoLoadSwiperCss' => $this->boolean()->notNull()->defaultValue(true),
