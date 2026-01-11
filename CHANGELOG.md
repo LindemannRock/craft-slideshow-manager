@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.5.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.0...v5.5.1) (2026-01-11)
+
+
+### Bug Fixes
+
+* change pluginName property type from nullable to string ([0ed5733](https://github.com/LindemannRock/craft-slideshow-manager/commit/0ed573365b6262b3aa6e8cb974d24dc2c7519291))
+* update pluginName to use getFullName method for better accuracy ([fc63658](https://github.com/LindemannRock/craft-slideshow-manager/commit/fc63658df1d438968aeebca64cf7a40b372e2d30))
+
 ## [5.5.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.4.0...v5.5.0) (2026-01-08)
 
 
