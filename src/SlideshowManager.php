@@ -73,29 +73,14 @@ class SlideshowManager extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        // Bootstrap the base plugin helper
-        PluginHelper::bootstrap($this, 'slideshowManagerHelper');
-
-        // Configure logging for this plugin
-        $settings = $this->getSettings();
-        LoggingLibrary::configure([
-            'pluginHandle' => $this->handle,
-            'pluginName' => $settings->getFullName(),
-            'logLevel' => $settings->logLevel ?? 'error',
-            'itemsPerPage' => $settings->itemsPerPage ?? 50,
-            'permissions' => ['slideshowManager:viewLogs'],
-        ]);
-
-        // Override plugin name from config if available, otherwise use from database settings
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('slideshow-manager');
-        if (isset($configFileSettings['pluginName'])) {
-            $this->name = $configFileSettings['pluginName'];
-        } else {
-            // Get from database settings
-            if (!empty($settings->pluginName)) {
-                $this->name = $settings->pluginName;
-            }
-        }
+        // Bootstrap base module (logging + Twig extension)
+        PluginHelper::bootstrap(
+            $this,
+            'slideshowManagerHelper',
+            ['slideshowManager:viewLogs'],
+            ['slideshowManager:downloadLogs']
+        );
+        PluginHelper::applyPluginNameFromConfig($this);
 
         $this->_registerCpRoutes();
         $this->_registerFieldTypes();

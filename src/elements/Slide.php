@@ -264,4 +264,51 @@ class Slide extends Element
 
         return $rules;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSearchableAttributes(): array
+    {
+        return ['title', 'description', 'category', 'contentText'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSearchKeywords(string $attribute): string
+    {
+        switch ($attribute) {
+            case 'contentText':
+                // Extract searchable text from structured content array
+                if (empty($this->content)) {
+                    return '';
+                }
+
+                return $this->extractTextFromContent($this->content);
+            default:
+                return parent::getSearchKeywords($attribute);
+        }
+    }
+
+    /**
+     * Recursively extract text values from content array
+     */
+    private function extractTextFromContent(array $content): string
+    {
+        $texts = [];
+
+        foreach ($content as $key => $value) {
+            if (is_string($value) && trim($value) !== '') {
+                $texts[] = $value;
+            } elseif (is_array($value)) {
+                $nested = $this->extractTextFromContent($value);
+                if ($nested !== '') {
+                    $texts[] = $nested;
+                }
+            }
+        }
+
+        return implode(' ', $texts);
+    }
 }
