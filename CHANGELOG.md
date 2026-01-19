@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.6.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.2...v5.6.0) (2026-01-18)
+
+
+### Features
+
+* enhance SlideshowManager initialization and add searchable attributes to Slide element ([b1f679b](https://github.com/LindemannRock/craft-slideshow-manager/commit/b1f679b625fd01e9aaefb4a9bb543e3162d836a0))
+
 ## [5.5.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.1...v5.5.2) (2026-01-11)
 
 
