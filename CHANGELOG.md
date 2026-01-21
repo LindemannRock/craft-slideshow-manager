@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.6.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.0...v5.6.1) (2026-01-21)
+
+
+### Bug Fixes
+
+* update header to reflect correct section title in general settings ([35b939e](https://github.com/LindemannRock/craft-slideshow-manager/commit/35b939ebb5bc6f16e553b29728a98db14dc95e06))
+
 ## [5.6.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.5.2...v5.6.0) (2026-01-18)
 
 
