@@ -190,10 +190,6 @@ class SlideshowManager extends Plugin
                     'slideshow-manager/settings/controls' => 'slideshow-manager/settings/controls',
                     'slideshow-manager/settings/advanced' => 'slideshow-manager/settings/advanced',
                     'slideshow-manager/settings/save' => 'slideshow-manager/settings/save',
-
-                    // Logs routes - use logging-library controller
-                    'slideshow-manager/logs' => 'logging-library/logs/index',
-                    'slideshow-manager/logs/download' => 'logging-library/logs/download',
                 ]);
             }
         );
@@ -257,7 +253,7 @@ class SlideshowManager extends Plugin
                     'heading' => 'Slideshow Manager',
                     'permissions' => [
                         'slideshowManager:viewLogs' => [
-                            'label' => 'View logs',
+                            'label' => 'View system logs',
                         ],
                     ],
                 ];
