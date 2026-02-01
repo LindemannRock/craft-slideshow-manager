@@ -77,8 +77,8 @@ class SlideshowManager extends Plugin
         PluginHelper::bootstrap(
             $this,
             'slideshowManagerHelper',
-            ['slideshowManager:viewLogs'],
-            ['slideshowManager:downloadLogs']
+            ['slideshowManager:viewSystemLogs'],
+            ['slideshowManager:downloadSystemLogs']
         );
         PluginHelper::applyPluginNameFromConfig($this);
 
@@ -160,11 +160,10 @@ class SlideshowManager extends Plugin
                 ],
             ];
 
-            // Add logs section using logging library (only if installed and enabled)
-            if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
-                Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
+            // Add logs section using logging library
+            if (PluginHelper::isPluginEnabled('logging-library')) {
                 $item = LoggingLibrary::addLogsNav($item, $this->handle, [
-                    'slideshowManager:viewLogs',
+                    'slideshowManager:viewSystemLogs',
                 ]);
             }
         }
@@ -253,7 +252,17 @@ class SlideshowManager extends Plugin
                     'heading' => 'Slideshow Manager',
                     'permissions' => [
                         'slideshowManager:viewLogs' => [
-                            'label' => 'View system logs',
+                            'label' => 'View logs',
+                            'nested' => [
+                                'slideshowManager:viewSystemLogs' => [
+                                    'label' => 'View system logs',
+                                    'nested' => [
+                                        'slideshowManager:downloadSystemLogs' => [
+                                            'label' => 'Download system logs',
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ];
