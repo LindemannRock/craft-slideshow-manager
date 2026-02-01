@@ -22,6 +22,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -153,12 +154,10 @@ class SlideshowManager extends Plugin
         if ($item) {
             $item['icon'] = '@appicons/photo.svg';
 
-            $item['subnav'] = [
-                'settings' => [
-                    'label' => Craft::t('slideshow-manager', 'Settings'),
-                    'url' => 'slideshow-manager/settings',
-                ],
-            ];
+            $settings = $this->getSettings();
+            $user = Craft::$app->getUser();
+            $sections = $this->getCpSections($settings);
+            $item['subnav'] = CpNavHelper::buildSubnav($user, $settings, $sections);
 
             // Add logs section using logging library
             if (PluginHelper::isPluginEnabled('logging-library')) {
@@ -166,9 +165,49 @@ class SlideshowManager extends Plugin
                     'slideshowManager:viewSystemLogs',
                 ]);
             }
+
+            // Hide from nav if no accessible subnav items
+            if (empty($item['subnav'])) {
+                return null;
+            }
         }
 
         return $item;
+    }
+
+    /**
+     * Get CP sections for nav + default route resolution
+     *
+     * @param Settings $settings
+     * @param bool $includeSettings
+     * @param bool $includeLogs
+     * @return array
+     * @since 5.7.0
+     */
+    public function getCpSections(Settings $settings, bool $includeSettings = true, bool $includeLogs = false): array
+    {
+        $sections = [];
+
+        if ($includeSettings) {
+            $sections[] = [
+                'key' => 'settings',
+                'label' => Craft::t('slideshow-manager', 'Settings'),
+                'url' => 'slideshow-manager/settings',
+                'permissionsAll' => ['slideshowManager:editSettings'],
+            ];
+        }
+
+        if ($includeLogs) {
+            $sections[] = [
+                'key' => 'logs',
+                'label' => Craft::t('slideshow-manager', 'Logs'),
+                'url' => 'slideshow-manager/logs',
+                'permissionsAll' => ['slideshowManager:viewSystemLogs'],
+                'when' => fn() => PluginHelper::isPluginEnabled('logging-library'),
+            ];
+        }
+
+        return $sections;
     }
 
     /**
