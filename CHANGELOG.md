@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.6.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.1...v5.6.2) (2026-02-05)
+
+
+### Bug Fixes
+
+* **SlideshowManager:** update [@since](https://github.com/since) version in getCpSections method ([742f7c2](https://github.com/LindemannRock/craft-slideshow-manager/commit/742f7c2316442d81f84532c06f5c50971d5725e8))
+
 ## [5.6.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.0...v5.6.1) (2026-01-21)
 
 
