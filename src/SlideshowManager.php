@@ -295,8 +295,9 @@ class SlideshowManager extends Plugin
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function(RegisterUserPermissionsEvent $event) {
+                $settings = $this->getSettings();
                 $event->permissions[] = [
-                    'heading' => 'Slideshow Manager',
+                    'heading' => $settings->getFullName(),
                     'permissions' => [
                         'slideshowManager:viewLogs' => [
                             'label' => 'View logs',
