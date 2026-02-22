@@ -97,6 +97,14 @@ class SlideshowManager extends Plugin
     /**
      * @inheritdoc
      */
+    public function setSettings(array|Model $settings): void
+    {
+        // No-op: settings come from loadFromDatabase() in createSettingsModel()
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function createSettingsModel(): ?Model
     {
         // Load settings from database using the new method

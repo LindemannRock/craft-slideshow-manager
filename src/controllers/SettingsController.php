@@ -177,9 +177,6 @@ class SettingsController extends Controller
 
         // Save settings to database
         if ($settings->saveToDatabase()) {
-            // Update the plugin's cached settings (CRITICAL - forces Craft to refresh)
-            $plugin->setSettings($settings->getAttributes());
-
             // Log successful save
             $this->logInfo('Settings saved successfully', [
                 'userId' => Craft::$app->getUser()->getId(),
