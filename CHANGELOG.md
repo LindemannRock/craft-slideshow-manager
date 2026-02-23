@@ -1,5 +1,20 @@
 # Changelog
 
+## [5.6.3](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.2...v5.6.3) (2026-02-23)
+
+
+### Bug Fixes
+
+* **SettingsController:** validate and sanitize settings section parameter ([e882a85](https://github.com/LindemannRock/craft-slideshow-manager/commit/e882a85e231334628a638e37382e7d505418b5cc))
+* **SlideshowManager:** add no-op setSettings method for clarity ([b064056](https://github.com/LindemannRock/craft-slideshow-manager/commit/b0640569ec23f614ffb4498ee949e24ed974d1d0))
+* **SlideshowManager:** update permission heading to use settings name ([a8d175b](https://github.com/LindemannRock/craft-slideshow-manager/commit/a8d175bf28d625fd6ef8d7a95f326ddcf2a7d767))
+
+
+### Miscellaneous Chores
+
+* add .gitattributes with export-ignore for Packagist distribution ([d951743](https://github.com/LindemannRock/craft-slideshow-manager/commit/d951743ed59e7381fe511fba2c75cec96d3c6281))
+* switch to Craft License for commercial release ([6a3ce04](https://github.com/LindemannRock/craft-slideshow-manager/commit/6a3ce04e7747a104fdd7ea3e87559cd0cad37e0c))
+
 ## [5.6.2](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.1...v5.6.2) (2026-02-05)
 
 
