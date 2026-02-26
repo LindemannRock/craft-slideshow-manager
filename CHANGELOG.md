@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.8.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.7.0...v5.8.0) (2026-02-26)
+
+
+### Features
+
+* **SlideshowManager:** add support for named CSS style presets ([e04160b](https://github.com/LindemannRock/craft-slideshow-manager/commit/e04160b9acd2a8f62a2b8f5ca645d1d4e7b66437))
+
 ## [5.7.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.3...v5.7.0) (2026-02-26)
 
 
