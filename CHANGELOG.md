@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.7.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.3...v5.7.0) (2026-02-26)
+
+
+### Features
+
+* **SettingsController:** add styles settings tab and update validation ([552315a](https://github.com/LindemannRock/craft-slideshow-manager/commit/552315a7a4dd4e3d899e143f5998dc9d6f86b11d))
+
 ## [5.6.3](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.6.2...v5.6.3) (2026-02-23)
 
 
