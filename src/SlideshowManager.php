@@ -118,6 +118,33 @@ class SlideshowManager extends Plugin
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getSettings(): Settings
+    {
+        /** @var Settings $settings */
+        $settings = parent::getSettings();
+
+        // Apply config file overrides using Craft's environment-aware config loading.
+        try {
+            $config = Craft::$app->getConfig()->getConfigFromFile('slideshow-manager');
+            if (!empty($config) && is_array($config)) {
+                foreach ($config as $key => $value) {
+                    if (property_exists($settings, $key)) {
+                        $settings->$key = $value;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->logError('Failed to apply config overrides', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $settings;
+    }
+
+    /**
      * Force reload settings from database
      * This is needed because Craft caches settings in a private property
      */

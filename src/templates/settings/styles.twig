@@ -20,6 +20,8 @@
 ] %}
 
 {% set cssVarsOverridden = settings.isOverriddenByConfig('swiperCssVars') %}
+{% set presetStyles = settings.swiperCssVars._styles is defined and settings.swiperCssVars._styles is iterable ? settings.swiperCssVars._styles : {} %}
+{% set activePresetHandle = settings.swiperCssVars._active ?? '' %}
 
 {% set cssVarGroups = [
     {
@@ -107,10 +109,36 @@
             </p>
         {% endif %}
 
+        <hr>
+
+        <h2>{{ 'Named Style Presets'|t('slideshow-manager') }}</h2>
+
+        {{ forms.textField({
+            label: 'Active Style Handle'|t('slideshow-manager'),
+            instructions: 'When calling `craft.slideshowManager.buildCssVars()` without arguments, this preset handle is used.'|t('slideshow-manager'),
+            id: 'swiperCssVars-active',
+            name: 'settings[swiperCssVars][_active]',
+            value: activePresetHandle,
+            placeholder: 'theme',
+            disabled: cssVarsOverridden,
+        }) }}
+
+        {{ forms.textareaField({
+            label: 'Style Presets JSON'|t('slideshow-manager'),
+            instructions: 'Create reusable styles keyed by handle. Reference them with `craft.slideshowManager.buildCssVarsByHandle(\'theme\')` or `craft.slideshowManager.buildCssVars(null, \'theme\')`.'|t('slideshow-manager'),
+            id: 'swiperCssVars-stylesJson',
+            name: 'settings[swiperCssVars][_stylesJson]',
+            value: presetStyles|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES')),
+            rows: 12,
+            disabled: cssVarsOverridden,
+        }) }}
+
+        <p class="light">
+            {{ 'Example: { "theme": { "themeColor": "var(--color-brand)" }, "minimal": { "navigationSize": "32px" } }'|t('slideshow-manager') }}
+        </p>
+
         {% for group in cssVarGroups %}
-            {% if not loop.first %}
-                <hr>
-            {% endif %}
+            <hr>
 
             <h2>{{ group.heading }}</h2>
 

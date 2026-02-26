@@ -161,6 +161,46 @@ class SettingsController extends Controller
             );
         }
 
+        // Handle named Swiper CSS style presets stored inside swiperCssVars
+        if (isset($settingsData['swiperCssVars']) && is_array($settingsData['swiperCssVars'])) {
+            $rawStylesJson = $settingsData['swiperCssVars']['_stylesJson'] ?? null;
+            if ($rawStylesJson !== null) {
+                unset($settingsData['swiperCssVars']['_stylesJson']);
+
+                $rawStylesJson = trim((string)$rawStylesJson);
+                if ($rawStylesJson === '') {
+                    $settingsData['swiperCssVars']['_styles'] = [];
+                } else {
+                    $decoded = json_decode($rawStylesJson, true);
+
+                    if (!is_array($decoded)) {
+                        $settings->addError('swiperCssVars', Craft::t('slideshow-manager', 'Style presets JSON is invalid.'));
+                        Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
+                        $section = $this->_validSettingsSection($this->request->getBodyParam('section', 'general'));
+                        $template = "slideshow-manager/settings/{$section}";
+                        return $this->renderTemplate($template, [
+                            'settings' => $settings,
+                        ]);
+                    }
+
+                    // Ensure each preset is an object/array of CSS vars
+                    foreach ($decoded as $handle => $vars) {
+                        if (!is_string($handle) || $handle === '' || !is_array($vars)) {
+                            $settings->addError('swiperCssVars', Craft::t('slideshow-manager', 'Style presets must be an object keyed by style handle, with each value as an object.'));
+                            Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
+                            $section = $this->_validSettingsSection($this->request->getBodyParam('section', 'general'));
+                            $template = "slideshow-manager/settings/{$section}";
+                            return $this->renderTemplate($template, [
+                                'settings' => $settings,
+                            ]);
+                        }
+                    }
+
+                    $settingsData['swiperCssVars']['_styles'] = $decoded;
+                }
+            }
+        }
+
         // Only update fields that were posted and are not overridden by config
         foreach ($settingsData as $key => $value) {
             if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {

@@ -163,9 +163,31 @@ return [
         // ========================================
         // Customize Swiper styling via CSS variables
         // These allow customization via --_swiper-* variables with fallbacks
-        // Set to null or empty array to use Swiper defaults
+        // Set to null or empty array to use Swiper defaults.
+        //
+        // Supports two formats:
+        // 1) Legacy flat vars (single style)
+        // 2) Named presets:
+        //    '_active' => 'theme',
+        //    '_styles' => [
+        //        'theme' => [ ...vars ],
+        //        'minimal' => [ ...vars ],
+        //    ]
 
         'swiperCssVars' => [
+            // Named preset support
+            // '_active' => 'theme',
+            // '_styles' => [
+            //     'theme' => [
+            //         'themeColor' => 'var(--color-brand)',
+            //         'navigationSize' => '44px',
+            //     ],
+            //     'minimal' => [
+            //         'navigationSize' => '32px',
+            //         'paginationBulletSize' => '6px',
+            //     ],
+            // ],
+
             // Theme
             // 'themeColor' => 'var(--color-brand)',
 

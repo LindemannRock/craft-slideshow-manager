@@ -22,6 +22,69 @@ use Twig\Markup;
 class SlideshowVariable
 {
     /**
+     * Get normalized style presets keyed by handle.
+     *
+     * Supports two formats in settings.swiperCssVars:
+     * 1) Legacy flat vars: ['themeColor' => '...']
+     * 2) Presets format: ['_styles' => ['theme' => [...]], '_active' => 'theme']
+     *
+     * @return array<string, array>
+     */
+    public function getCssVarStyles(): array
+    {
+        $settings = $this->getSettings();
+        $cssVars = $settings->swiperCssVars ?? [];
+
+        if (!is_array($cssVars) || $cssVars === []) {
+            return [];
+        }
+
+        if (isset($cssVars['_styles']) && is_array($cssVars['_styles'])) {
+            $styles = [];
+            foreach ($cssVars['_styles'] as $handle => $vars) {
+                if (is_string($handle) && $handle !== '' && is_array($vars)) {
+                    $styles[$handle] = $vars;
+                }
+            }
+            return $styles;
+        }
+
+        // Legacy shape: treat as a single default style
+        $legacy = [];
+        foreach ($cssVars as $key => $value) {
+            if (is_string($key) && !str_starts_with($key, '_')) {
+                $legacy[$key] = $value;
+            }
+        }
+
+        return $legacy !== [] ? ['default' => $legacy] : [];
+    }
+
+    /**
+     * Get the active style handle from settings.
+     */
+    public function getActiveCssVarStyleHandle(): ?string
+    {
+        $settings = $this->getSettings();
+        $cssVars = $settings->swiperCssVars ?? [];
+
+        if (is_array($cssVars) && isset($cssVars['_active']) && is_string($cssVars['_active']) && $cssVars['_active'] !== '') {
+            return $cssVars['_active'];
+        }
+
+        $styles = $this->getCssVarStyles();
+        if (isset($styles['default'])) {
+            return 'default';
+        }
+
+        if ($styles !== []) {
+            return array_key_first($styles);
+        }
+
+        return null;
+    }
+
+    /**
      * Render a slideshow
      *
      * @param Slideshow $slideshow
@@ -190,15 +253,24 @@ class SlideshowVariable
      * Build inline CSS custom properties for Swiper styling
      * Allows customization via --_swiper-* variables with fallbacks
      *
-     * @param array|null $cssVars Optional custom CSS variables (from settings)
+     * @param array|null $cssVars Optional direct CSS variables (highest priority)
+     * @param string|null $styleHandle Optional named style handle from settings
      * @return string Inline style string with CSS custom properties
      */
-    public function buildCssVars(?array $cssVars = null): string
+    public function buildCssVars(?array $cssVars = null, ?string $styleHandle = null): string
     {
-        // Get CSS vars from settings if not provided
+        // Resolve direct CSS vars first, then named style, then active/default style
         if ($cssVars === null) {
-            $settings = $this->getSettings();
-            $cssVars = $settings->swiperCssVars ?? [];
+            $styles = $this->getCssVarStyles();
+
+            if ($styleHandle !== null && isset($styles[$styleHandle])) {
+                $cssVars = $styles[$styleHandle];
+            } else {
+                $activeHandle = $this->getActiveCssVarStyleHandle();
+                $cssVars = ($activeHandle !== null && isset($styles[$activeHandle]))
+                    ? $styles[$activeHandle]
+                    : [];
+            }
         }
 
         if (empty($cssVars)) {
@@ -270,6 +342,17 @@ class SlideshowVariable
         }
 
         return !empty($styles) ? implode(';', $styles) : '';
+    }
+
+    /**
+     * Build CSS vars for a named preset handle.
+     *
+     * @param string $styleHandle
+     * @return string
+     */
+    public function buildCssVarsByHandle(string $styleHandle): string
+    {
+        return $this->buildCssVars(null, $styleHandle);
     }
 
     /**
