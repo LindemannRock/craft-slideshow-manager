@@ -234,6 +234,7 @@ class SlideshowManager extends Plugin
                     'slideshow-manager/settings/basic' => 'slideshow-manager/settings/basic',
                     'slideshow-manager/settings/layout' => 'slideshow-manager/settings/layout',
                     'slideshow-manager/settings/controls' => 'slideshow-manager/settings/controls',
+                    'slideshow-manager/settings/styles' => 'slideshow-manager/settings/styles',
                     'slideshow-manager/settings/advanced' => 'slideshow-manager/settings/advanced',
                     'slideshow-manager/settings/save' => 'slideshow-manager/settings/save',
                 ]);

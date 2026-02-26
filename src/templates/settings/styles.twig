@@ -1,0 +1,133 @@
+{#
+ # Slideshow Manager Styles Settings
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2026 LindemannRock
+ #}
+
+{% extends "slideshow-manager/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Styles'|t('slideshow-manager') %}
+{% set selectedSettingsItem = 'styles' %}
+{% set selectedSubnavItem = 'settings' %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: slideshowHelper.fullName|t('slideshow-manager'), url: url('slideshow-manager') },
+    { label: 'Settings'|t('slideshow-manager'), url: url('slideshow-manager/settings') },
+    { label: 'Styles'|t('slideshow-manager'), url: url('slideshow-manager/settings/styles') },
+] %}
+
+{% set cssVarsOverridden = settings.isOverriddenByConfig('swiperCssVars') %}
+
+{% set cssVarGroups = [
+    {
+        heading: 'Theme'|t('slideshow-manager'),
+        fields: [
+            { key: 'themeColor', label: 'Theme Color'|t('slideshow-manager'), placeholder: 'var(--color-brand)' },
+        ],
+    },
+    {
+        heading: 'Navigation'|t('slideshow-manager'),
+        fields: [
+            { key: 'navigationSize', label: 'Navigation Size'|t('slideshow-manager'), placeholder: '44px' },
+            { key: 'navigationTopOffset', label: 'Navigation Top Offset'|t('slideshow-manager'), placeholder: '50%' },
+            { key: 'navigationSidesOffset', label: 'Navigation Sides Offset'|t('slideshow-manager'), placeholder: '10px' },
+            { key: 'navigationColor', label: 'Navigation Color'|t('slideshow-manager'), placeholder: 'var(--color-brand)' },
+            { key: 'navigationInactiveColor', label: 'Navigation Inactive Color'|t('slideshow-manager'), placeholder: 'rgba(0, 0, 0, 0.3)' },
+            { key: 'navigationBg', label: 'Navigation Background'|t('slideshow-manager'), placeholder: 'transparent' },
+            { key: 'navigationBgHover', label: 'Navigation Background Hover'|t('slideshow-manager'), placeholder: 'rgba(0, 0, 0, 0.05)' },
+            { key: 'navigationPadding', label: 'Navigation Padding'|t('slideshow-manager'), placeholder: '0.5rem' },
+            { key: 'navigationRadius', label: 'Navigation Radius'|t('slideshow-manager'), placeholder: '9999px' },
+            { key: 'navigationBorderColor', label: 'Navigation Border Color'|t('slideshow-manager'), placeholder: 'transparent' },
+            { key: 'navigationBorderColorHover', label: 'Navigation Border Color Hover'|t('slideshow-manager'), placeholder: 'transparent' },
+            { key: 'navigationShadow', label: 'Navigation Shadow'|t('slideshow-manager'), placeholder: 'none' },
+            { key: 'navigationShadowHover', label: 'Navigation Shadow Hover'|t('slideshow-manager'), placeholder: 'none' },
+        ],
+    },
+    {
+        heading: 'Pagination'|t('slideshow-manager'),
+        fields: [
+            { key: 'paginationColor', label: 'Pagination Color'|t('slideshow-manager'), placeholder: 'var(--color-brand)' },
+            { key: 'paginationBulletSize', label: 'Bullet Size'|t('slideshow-manager'), placeholder: '8px' },
+            { key: 'paginationBulletWidth', label: 'Bullet Width'|t('slideshow-manager'), placeholder: '8px' },
+            { key: 'paginationBulletHeight', label: 'Bullet Height'|t('slideshow-manager'), placeholder: '8px' },
+            { key: 'paginationBulletInactiveColor', label: 'Bullet Inactive Color'|t('slideshow-manager'), placeholder: '#000' },
+            { key: 'paginationBulletInactiveOpacity', label: 'Bullet Inactive Opacity'|t('slideshow-manager'), placeholder: '0.2' },
+            { key: 'paginationBulletOpacity', label: 'Bullet Opacity'|t('slideshow-manager'), placeholder: '1' },
+            { key: 'paginationBulletHorizontalGap', label: 'Bullet Horizontal Gap'|t('slideshow-manager'), placeholder: '4px' },
+            { key: 'paginationBulletVerticalGap', label: 'Bullet Vertical Gap'|t('slideshow-manager'), placeholder: '6px' },
+            { key: 'paginationFractionColor', label: 'Fraction Color'|t('slideshow-manager'), placeholder: 'inherit' },
+            { key: 'paginationProgressbarBgColor', label: 'Progressbar Background Color'|t('slideshow-manager'), placeholder: 'rgba(0, 0, 0, 0.25)' },
+            { key: 'paginationProgressbarSize', label: 'Progressbar Size'|t('slideshow-manager'), placeholder: '4px' },
+            { key: 'paginationLeft', label: 'Pagination Left'|t('slideshow-manager'), placeholder: 'auto' },
+            { key: 'paginationRight', label: 'Pagination Right'|t('slideshow-manager'), placeholder: '8px' },
+            { key: 'paginationTop', label: 'Pagination Top'|t('slideshow-manager'), placeholder: 'auto' },
+            { key: 'paginationBottom', label: 'Pagination Bottom'|t('slideshow-manager'), placeholder: '8px' },
+        ],
+    },
+    {
+        heading: 'Scrollbar'|t('slideshow-manager'),
+        fields: [
+            { key: 'scrollbarBorderRadius', label: 'Scrollbar Border Radius'|t('slideshow-manager'), placeholder: '10px' },
+            { key: 'scrollbarTop', label: 'Scrollbar Top'|t('slideshow-manager'), placeholder: 'auto' },
+            { key: 'scrollbarBottom', label: 'Scrollbar Bottom'|t('slideshow-manager'), placeholder: '4px' },
+            { key: 'scrollbarLeft', label: 'Scrollbar Left'|t('slideshow-manager'), placeholder: 'auto' },
+            { key: 'scrollbarRight', label: 'Scrollbar Right'|t('slideshow-manager'), placeholder: '4px' },
+            { key: 'scrollbarSidesOffset', label: 'Scrollbar Sides Offset'|t('slideshow-manager'), placeholder: '1%' },
+            { key: 'scrollbarBgColor', label: 'Scrollbar Background Color'|t('slideshow-manager'), placeholder: 'rgba(0, 0, 0, 0.1)' },
+            { key: 'scrollbarDragBgColor', label: 'Scrollbar Drag Color'|t('slideshow-manager'), placeholder: 'rgba(0, 0, 0, 0.5)' },
+            { key: 'scrollbarSize', label: 'Scrollbar Size'|t('slideshow-manager'), placeholder: '4px' },
+        ],
+    },
+    {
+        heading: 'Thumbs & Slide'|t('slideshow-manager'),
+        fields: [
+            { key: 'thumbActiveColor', label: 'Thumb Active Color'|t('slideshow-manager'), placeholder: 'var(--color-brand)' },
+            { key: 'slideBgColor', label: 'Slide Background Color'|t('slideshow-manager'), placeholder: 'transparent' },
+        ],
+    },
+] %}
+
+{% block content %}
+    <form method="post" accept-charset="UTF-8">
+        {{ actionInput('slideshow-manager/settings/save') }}
+        {{ csrfInput() }}
+        {{ redirectInput('slideshow-manager/settings/styles') }}
+        {{ hiddenInput('section', 'styles') }}
+
+        <p class="light" style="margin-top: 0;">
+            {{ 'Set Swiper CSS variables used by `craft.slideshowManager.buildCssVars()`. Leave fields empty to use Swiper defaults.'|t('slideshow-manager') }}
+        </p>
+
+        {% if cssVarsOverridden %}
+            <p class="warning with-icon">
+                {{ 'These values are being overridden by the <code>swiperCssVars</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw }}
+            </p>
+        {% endif %}
+
+        {% for group in cssVarGroups %}
+            {% if not loop.first %}
+                <hr>
+            {% endif %}
+
+            <h2>{{ group.heading }}</h2>
+
+            {% for field in group.fields %}
+                {{ forms.textField({
+                    label: field.label,
+                    id: 'swiperCssVars-' ~ field.key,
+                    name: 'settings[swiperCssVars][' ~ field.key ~ ']',
+                    value: settings.swiperCssVars[field.key] ?? '',
+                    placeholder: field.placeholder,
+                    disabled: cssVarsOverridden,
+                }) }}
+            {% endfor %}
+        {% endfor %}
+
+        <div class="buttons">
+            <button type="submit" class="btn submit">{{ 'Save Settings'|t('slideshow-manager') }}</button>
+        </div>
+    </form>
+{% endblock %}

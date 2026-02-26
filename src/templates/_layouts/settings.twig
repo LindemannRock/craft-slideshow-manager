@@ -28,6 +28,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ url('slideshow-manager/settings/styles') }}" {% if selectedSettingsItem == 'styles' %}class="sel"{% endif %} data-nav-item="styles">
+                    {{ 'Styles'|t('slideshow-manager') }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ url('slideshow-manager/settings/advanced') }}" {% if selectedSettingsItem == 'advanced' %}class="sel"{% endif %} data-nav-item="advanced">
                     {{ 'Advanced'|t('slideshow-manager') }}
                 </a>

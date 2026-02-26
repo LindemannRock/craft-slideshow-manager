@@ -102,6 +102,21 @@ class SettingsController extends Controller
     }
 
     /**
+     * Styles settings tab
+     */
+    public function actionStyles(): Response
+    {
+        $plugin = SlideshowManager::getInstance();
+        $plugin->reloadSettings();
+        $settings = $plugin->getSettings();
+
+        return $this->renderTemplate('slideshow-manager/settings/styles', [
+            'plugin' => $plugin,
+            'settings' => $settings,
+        ]);
+    }
+
+    /**
      * Advanced settings tab
      */
     public function actionAdvanced(): Response
@@ -202,7 +217,7 @@ class SettingsController extends Controller
      */
     private function _validSettingsSection(string $section): string
     {
-        $allowed = ['general', 'basic', 'layout', 'controls', 'advanced'];
+        $allowed = ['general', 'basic', 'layout', 'controls', 'styles', 'advanced'];
 
         return in_array($section, $allowed, true) ? $section : 'general';
     }

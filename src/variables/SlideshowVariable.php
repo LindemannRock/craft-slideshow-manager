@@ -221,6 +221,7 @@ class SlideshowVariable
             'navigationBg' => '--swiper-navigation-bg:var(--_swiper-navigation-bg, {value})',
             'navigationBgHover' => '--swiper-navigation-bg-hover:var(--_swiper-navigation-bg-hover, {value})',
             'navigationPadding' => '--swiper-navigation-padding:var(--_swiper-navigation-padding, {value})',
+            'navigationRadius' => '--swiper-navigation-radius:var(--_swiper-navigation-radius, {value})',
             'navigationBorderColor' => '--swiper-navigation-border-color:var(--_swiper-navigation-border-color, {value})',
             'navigationBorderColorHover' => '--swiper-navigation-border-color-hover:var(--_swiper-navigation-border-color-hover, {value})',
             'navigationShadow' => '--swiper-navigation-shadow:var(--_swiper-navigation-shadow, {value})',

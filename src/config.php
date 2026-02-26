@@ -178,6 +178,7 @@ return [
             // 'navigationBg' => 'transparent',
             // 'navigationBgHover' => 'rgba(0, 0, 0, 0.05)',
             // 'navigationPadding' => '0.5rem',
+            // 'navigationRadius' => '9999px',
             // 'navigationBorderColor' => 'transparent',
             // 'navigationBorderColorHover' => 'transparent',
             // 'navigationShadow' => 'none',
