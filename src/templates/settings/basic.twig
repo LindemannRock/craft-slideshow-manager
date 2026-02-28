@@ -90,10 +90,22 @@
                 { label: 'Bullets', value: 'bullets' },
                 { label: 'Fraction', value: 'fraction' },
                 { label: 'Progressbar', value: 'progressbar' },
+                { label: 'Custom', value: 'custom' },
             ],
             disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.type'),
             warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.type') ?
                 'This is being overridden by the <code>defaultSwiperConfig.pagination.type</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
+        }) }}
+
+        {{ forms.textField({
+            label: 'Custom Pagination Template'|t('slideshow-manager'),
+            instructions: 'Used only when Pagination Type is Custom. Available placeholders: <code>{current}</code>, <code>{total}</code>'|t('slideshow-manager')|raw,
+            id: 'defaultSwiperConfig-pagination-customTemplate',
+            name: 'settings[defaultSwiperConfig][pagination][customTemplate]',
+            value: settings.defaultSwiperConfig.pagination.customTemplate ?? '{current} / {total}',
+            disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.customTemplate'),
+            warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.customTemplate') ?
+                'This is being overridden by the <code>defaultSwiperConfig.pagination.customTemplate</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
         }) }}
 
         {{ forms.lightswitchField({

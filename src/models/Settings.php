@@ -53,6 +53,7 @@ class Settings extends Model
             'enabled' => true,
             'clickable' => true,
             'type' => 'bullets',
+            'customTemplate' => '{current} / {total}',
         ],
         'autoplay' => [
             'enabled' => false,

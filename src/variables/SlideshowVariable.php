@@ -175,6 +175,10 @@ class SlideshowVariable
             if (!empty($config['paginationType'])) {
                 $swiperConfig['pagination']['type'] = $config['paginationType'];
             }
+
+            if (!empty($config['paginationCustomTemplate'])) {
+                $swiperConfig['pagination']['customTemplate'] = (string)$config['paginationCustomTemplate'];
+            }
         } else {
             $swiperConfig['pagination'] = false;
         }
@@ -388,6 +392,22 @@ class SlideshowVariable
             const overrides = {$overridesJson};
             if (overrides) {
                 config = Object.assign({}, config, overrides);
+            }
+
+            // Support pagination type "custom" via template placeholders.
+            // Swiper requires pagination.renderCustom to be a function, which cannot be JSON encoded.
+            if (config.pagination && typeof config.pagination === 'object' && config.pagination.type === 'custom') {
+                const customTemplate = typeof config.pagination.customTemplate === 'string' && config.pagination.customTemplate.trim() !== ''
+                    ? config.pagination.customTemplate
+                    : '{current} / {total}';
+
+                config.pagination.renderCustom = function(swiper, current, total) {
+                    return customTemplate
+                        .split('{current}').join(String(current))
+                        .split('{total}').join(String(total));
+                };
+
+                delete config.pagination.customTemplate;
             }
 
             if (debug) {

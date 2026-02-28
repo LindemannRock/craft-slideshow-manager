@@ -55,7 +55,16 @@
                 { label: 'Bullets', value: 'bullets' },
                 { label: 'Fraction', value: 'fraction' },
                 { label: 'Progressbar', value: 'progressbar' },
+                { label: 'Custom', value: 'custom' },
             ],
+        }) }}
+
+        {{ forms.textField({
+            label: 'Custom Pagination Template'|t('slideshow-manager'),
+            instructions: 'Used only when Pagination Type is Custom. Available placeholders: {current}, {total}'|t('slideshow-manager'),
+            name: 'paginationCustomTemplate',
+            value: config.paginationCustomTemplate ?? '{current} / {total}',
+            placeholder: '{current} / {total}',
         }) }}
 
         {{ forms.lightswitchField({

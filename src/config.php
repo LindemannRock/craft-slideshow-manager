@@ -67,7 +67,8 @@ return [
             'pagination' => [
                 'enabled' => true,
                 'clickable' => true,
-                'type' => 'bullets',           // bullets, fraction, progressbar
+                'type' => 'bullets',           // bullets, fraction, progressbar, custom
+                'customTemplate' => '{current} / {total}', // Used when type = custom
             ],
             'paginationVisibility' => 'default', // default, hide-mobile, hide-desktop, mobile-only, desktop-only
 

@@ -57,6 +57,26 @@
 
             <div id="field-pagination-visibility-{{ uniqueId }}" class="{{ (config.pagination.enabled ?? true) ? '' : 'hidden' }}">
                 {{ forms.selectField({
+                    label: 'Pagination Type'|t('slideshow-manager'),
+                    name: namespace ~ '[slideshowConfig][pagination][type]',
+                    value: config.pagination.type ?? 'bullets',
+                    options: [
+                        { label: 'Bullets', value: 'bullets' },
+                        { label: 'Fraction', value: 'fraction' },
+                        { label: 'Progressbar', value: 'progressbar' },
+                        { label: 'Custom', value: 'custom' },
+                    ],
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Custom Pagination Template'|t('slideshow-manager'),
+                    instructions: 'Used only when Pagination Type is Custom. Available placeholders: {current}, {total}'|t('slideshow-manager'),
+                    name: namespace ~ '[slideshowConfig][pagination][customTemplate]',
+                    value: config.pagination.customTemplate ?? '{current} / {total}',
+                    placeholder: '{current} / {total}',
+                }) }}
+
+                {{ forms.selectField({
                     label: 'Pagination Visibility'|t('slideshow-manager'),
                     name: namespace ~ '[slideshowConfig][paginationVisibility]',
                     value: config.paginationVisibility ?? 'default',
