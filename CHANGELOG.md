@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.9.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.8.0...v5.9.0) (2026-02-28)
+
+
+### Features
+
+* **SlideshowManager:** add custom pagination template support ([d0272b2](https://github.com/LindemannRock/craft-slideshow-manager/commit/d0272b28611c012929b1e0f8e80e131de7c83377))
+
 ## [5.8.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.7.0...v5.8.0) (2026-02-26)
 
 
