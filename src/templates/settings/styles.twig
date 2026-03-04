@@ -119,6 +119,7 @@
             id: 'swiperCssVars-active',
             name: 'settings[swiperCssVars][_active]',
             value: activePresetHandle,
+            errors: settings.getErrors('swiperCssVars._active'),
             placeholder: 'theme',
             disabled: cssVarsOverridden,
         }) }}
@@ -130,6 +131,7 @@
             name: 'settings[swiperCssVars][_stylesJson]',
             value: presetStyles|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES')),
             rows: 12,
+            errors: settings.getErrors('swiperCssVars._styles'),
             disabled: cssVarsOverridden,
         }) }}
 
@@ -148,6 +150,7 @@
                     id: 'swiperCssVars-' ~ field.key,
                     name: 'settings[swiperCssVars][' ~ field.key ~ ']',
                     value: settings.swiperCssVars[field.key] ?? '',
+                    errors: settings.getErrors('swiperCssVars.' ~ field.key),
                     placeholder: field.placeholder,
                     disabled: cssVarsOverridden,
                 }) }}

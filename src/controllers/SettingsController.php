@@ -139,6 +139,8 @@ class SettingsController extends Controller
         $this->requirePostRequest();
 
         $plugin = SlideshowManager::getInstance();
+        $section = $this->_validSettingsSection($this->request->getBodyParam('section', 'general'));
+        $attributesToValidate = $this->_validationAttributesForSection($section);
 
         // Load current settings from database
         $settings = Settings::loadFromDatabase();
@@ -174,9 +176,8 @@ class SettingsController extends Controller
                     $decoded = json_decode($rawStylesJson, true);
 
                     if (!is_array($decoded)) {
-                        $settings->addError('swiperCssVars', Craft::t('slideshow-manager', 'Style presets JSON is invalid.'));
+                        $settings->addError('swiperCssVars._styles', Craft::t('slideshow-manager', 'Style presets JSON is invalid.'));
                         Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
-                        $section = $this->_validSettingsSection($this->request->getBodyParam('section', 'general'));
                         $template = "slideshow-manager/settings/{$section}";
                         return $this->renderTemplate($template, [
                             'settings' => $settings,
@@ -186,9 +187,8 @@ class SettingsController extends Controller
                     // Ensure each preset is an object/array of CSS vars
                     foreach ($decoded as $handle => $vars) {
                         if (!is_string($handle) || $handle === '' || !is_array($vars)) {
-                            $settings->addError('swiperCssVars', Craft::t('slideshow-manager', 'Style presets must be an object keyed by style handle, with each value as an object.'));
+                            $settings->addError('swiperCssVars._styles', Craft::t('slideshow-manager', 'Style presets must be an object keyed by style handle, with each value as an object.'));
                             Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
-                            $section = $this->_validSettingsSection($this->request->getBodyParam('section', 'general'));
                             $template = "slideshow-manager/settings/{$section}";
                             return $this->renderTemplate($template, [
                                 'settings' => $settings,
@@ -200,6 +200,12 @@ class SettingsController extends Controller
                 }
             }
         }
+
+        // Skip validation for fields overridden by config.
+        $attributesToValidate = array_values(array_filter(
+            $attributesToValidate,
+            static fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),
+        ));
 
         // Only update fields that were posted and are not overridden by config
         foreach ($settingsData as $key => $value) {
@@ -215,16 +221,12 @@ class SettingsController extends Controller
         }
 
         // Validate
-        if (!$settings->validate()) {
+        if (!$settings->validate($attributesToValidate)) {
             Craft::$app->getSession()->setError(Craft::t('slideshow-manager', 'Could not save settings.'));
 
             // Log validation failure
             $this->logWarning('Settings validation failed', ['errors' => $settings->getErrors()]);
 
-            // Get the section to re-render the correct template with errors
-            $section = $this->_validSettingsSection(
-                $this->request->getBodyParam('section', 'general'),
-            );
             $template = "slideshow-manager/settings/{$section}";
 
             return $this->renderTemplate($template, [
@@ -233,7 +235,7 @@ class SettingsController extends Controller
         }
 
         // Save settings to database
-        if ($settings->saveToDatabase()) {
+        if ($settings->saveToDatabase($attributesToValidate)) {
             // Log successful save
             $this->logInfo('Settings saved successfully', [
                 'userId' => Craft::$app->getUser()->getId(),
@@ -260,5 +262,21 @@ class SettingsController extends Controller
         $allowed = ['general', 'basic', 'layout', 'controls', 'styles', 'advanced'];
 
         return in_array($section, $allowed, true) ? $section : 'general';
+    }
+
+    /**
+     * Return top-level settings attributes validated for the active section.
+     *
+     * @param string $section
+     * @return array
+     */
+    private function _validationAttributesForSection(string $section): array
+    {
+        return match ($section) {
+            'general' => ['pluginName', 'autoLoadSwiperCss', 'autoLoadSwiperJs', 'enableCache', 'cacheDuration', 'logLevel'],
+            'basic', 'layout', 'controls', 'advanced' => ['defaultSwiperConfig'],
+            'styles' => ['swiperCssVars'],
+            default => [],
+        };
     }
 }

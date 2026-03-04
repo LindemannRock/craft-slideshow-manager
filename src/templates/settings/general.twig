@@ -42,6 +42,7 @@
         id: 'pluginName',
         name: 'settings[pluginName]',
         value: settings.pluginName ?? 'Slideshow Manager',
+        errors: settings.getErrors('pluginName'),
         placeholder: 'Slideshow Manager',
         warning: settings.isOverriddenByConfig('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
         disabled: settings.isOverriddenByConfig('pluginName'),
@@ -94,8 +95,10 @@
         id: 'cacheDuration',
         name: 'settings[cacheDuration]',
         value: settings.cacheDuration,
+        errors: settings.getErrors('cacheDuration'),
         type: 'number',
-        min: 0,
+        min: 1,
+        max: 2147483647,
         warning: settings.isOverriddenByConfig('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/slideshow-manager.php` file.'|t('slideshow-manager'),
         disabled: settings.isOverriddenByConfig('cacheDuration')
     }) }}
@@ -125,6 +128,7 @@
         name: 'settings[logLevel]',
         options: logLevelOptions,
         value: settings.logLevel,
+        errors: settings.getErrors('logLevel'),
         disabled: settings.isOverriddenByConfig('logLevel'),
         warning: settings.isOverriddenByConfig('logLevel') ?
             "This is being overridden by the <code>logLevel</code> setting in <code>config/slideshow-manager.php</code>."|raw : null,

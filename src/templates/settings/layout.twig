@@ -34,6 +34,7 @@
         id: 'defaultSwiperConfig-slidesPerView',
         name: 'settings[defaultSwiperConfig][slidesPerView]',
         value: settings.defaultSwiperConfig.slidesPerView ?? 1,
+        errors: settings.getErrors('defaultSwiperConfig.slidesPerView'),
         type: 'number',
         min: 1,
         step: 0.1,
@@ -48,6 +49,7 @@
         id: 'defaultSwiperConfig-spaceBetween',
         name: 'settings[defaultSwiperConfig][spaceBetween]',
         value: settings.defaultSwiperConfig.spaceBetween ?? 0,
+        errors: settings.getErrors('defaultSwiperConfig.spaceBetween'),
         type: 'number',
         min: 0,
         disabled: settings.isOverriddenByConfig('defaultSwiperConfig.spaceBetween'),
@@ -166,6 +168,14 @@
                 </div>
             {% endfor %}
         </div>
+
+        {% if settings.getErrors('defaultSwiperConfig.breakpoints') %}
+            <ul class="errors">
+                {% for error in settings.getErrors('defaultSwiperConfig.breakpoints') %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         <div style="display: flex; gap: 0.5rem;">
             <button type="button" id="add-breakpoint" class="btn add icon">

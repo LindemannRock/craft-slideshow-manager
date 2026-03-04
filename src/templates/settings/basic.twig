@@ -103,6 +103,7 @@
             id: 'defaultSwiperConfig-pagination-customTemplate',
             name: 'settings[defaultSwiperConfig][pagination][customTemplate]',
             value: settings.defaultSwiperConfig.pagination.customTemplate ?? '{current} / {total}',
+            errors: settings.getErrors('defaultSwiperConfig.pagination.customTemplate'),
             disabled: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.customTemplate'),
             warning: settings.isOverriddenByConfig('defaultSwiperConfig.pagination.customTemplate') ?
                 'This is being overridden by the <code>defaultSwiperConfig.pagination.customTemplate</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
@@ -201,6 +202,7 @@
         id: 'defaultSwiperConfig-speed',
         name: 'settings[defaultSwiperConfig][speed]',
         value: settings.defaultSwiperConfig.speed ?? 300,
+        errors: settings.getErrors('defaultSwiperConfig.speed'),
         type: 'number',
         min: 0,
         disabled: settings.isOverriddenByConfig('defaultSwiperConfig.speed'),

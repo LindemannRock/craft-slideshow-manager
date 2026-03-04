@@ -3,6 +3,12 @@
 {% set title = title ?? 'Settings'|t('slideshow-manager') %}
 {% set selectedSettingsItem = selectedSettingsItem ?? 'general' %}
 {% set selectedSubnavItem = 'settings' %}
+{% if settings is defined and settings.hasErrors() %}
+    {% set errorSummary = include('lindemannrock-base/_partials/error-summary', {
+        errors: settings.getErrors(),
+        translationCategory: 'slideshow-manager',
+    }) %}
+{% endif %}
 
 {% block sidebar %}
     <nav id="settings-nav">
