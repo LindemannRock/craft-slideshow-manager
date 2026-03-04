@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.10.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.9.0...v5.10.0) (2026-03-04)
+
+
+### Features
+
+* **Settings:** enhance validation and error handling for settings ([556fe9e](https://github.com/LindemannRock/craft-slideshow-manager/commit/556fe9eaadc93816c1382f0f3ed6a369e68fc973))
+
 ## [5.9.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.8.0...v5.9.0) (2026-02-28)
 
 
