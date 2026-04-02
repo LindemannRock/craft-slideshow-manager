@@ -62,6 +62,11 @@ class SlideshowManager extends Plugin
     public bool $hasCpSettings = true;
 
     /**
+     * @var bool Whether the plugin settings page is accessible when allowAdminChanges is false
+     */
+    public bool $hasReadOnlyCpSettings = true;
+
+    /**
      * @var bool Whether the plugin registers a control panel section
      */
     public bool $hasCpSection = true;
@@ -161,6 +166,14 @@ class SlideshowManager extends Plugin
      * @inheritdoc
      */
     public function getSettingsResponse(): mixed
+    {
+        return Craft::$app->controller->redirect('slideshow-manager/settings');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getReadOnlySettingsResponse(): mixed
     {
         return Craft::$app->controller->redirect('slideshow-manager/settings');
     }
