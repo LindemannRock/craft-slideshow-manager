@@ -41,3 +41,7 @@ README.md.backup
 *.zip
 /releases/
 /backups/
+
+# Internal
+/.internal/
+/CLAUDE.md
