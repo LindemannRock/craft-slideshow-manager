@@ -130,16 +130,8 @@ class SlideshowManager extends Plugin
         /** @var Settings $settings */
         $settings = parent::getSettings();
 
-        // Apply config file overrides using Craft's environment-aware config loading.
         try {
-            $config = Craft::$app->getConfig()->getConfigFromFile('slideshow-manager');
-            if (!empty($config) && is_array($config)) {
-                foreach ($config as $key => $value) {
-                    if (property_exists($settings, $key)) {
-                        $settings->$key = $value;
-                    }
-                }
-            }
+            PluginHelper::applyConfigOverridesToSettings($settings, 'slideshow-manager');
         } catch (\Throwable $e) {
             $this->logError('Failed to apply config overrides', [
                 'error' => $e->getMessage(),
