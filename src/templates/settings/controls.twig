@@ -20,13 +20,11 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/controls') }}
-        {{ hiddenInput('section', 'controls') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/controls') }}
+    {{ hiddenInput('section', 'controls') }}
 
-        <h2 style="margin-top: 0;">{{ 'Keyboard Control'|t('slideshow-manager') }}</h2>
+        <h2 class="first">{{ 'Keyboard Control'|t('slideshow-manager') }}</h2>
 
     {{ forms.lightswitchField({
         label: 'Enable Keyboard'|t('slideshow-manager'),
@@ -139,6 +137,4 @@
                 'This is being overridden by the <code>defaultSwiperConfig.hashNavigation.watchState</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
         }) }}
     </div>
-
-    </form>
 {% endblock %}

@@ -28,17 +28,15 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/general') }}
-        {{ hiddenInput('section', 'general') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/general') }}
+    {{ hiddenInput('section', 'general') }}
 
-        <h2 style="margin-top: 0;">{{ 'General Settings'|t('slideshow-manager') }}</h2>
+        <h2 class="first">{{ 'General Settings'|t('slideshow-manager') }}</h2>
 
     {{ forms.textField({
         label: 'Plugin name'|t('slideshow-manager'),
-        instructions: 'The public-facing name of the plugin'|t('slideshow-manager'),
+        instructions: 'The name of the plugin as it appears in the Control Panel menu'|t('slideshow-manager'),
         id: 'pluginName',
         name: 'settings[pluginName]',
         value: settings.pluginName ?? 'Slideshow Manager',
@@ -133,6 +131,4 @@
         warning: settings.isOverriddenByConfig('logLevel') ?
             "This is being overridden by the <code>logLevel</code> setting in <code>config/slideshow-manager.php</code>."|raw : null,
     }) }}
-
-    </form>
 {% endblock %}

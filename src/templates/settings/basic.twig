@@ -20,13 +20,11 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/basic') }}
-        {{ hiddenInput('section', 'basic') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/basic') }}
+    {{ hiddenInput('section', 'basic') }}
 
-        <p class="light" style="margin-top: 0;">{{ 'These defaults will be used for all new slideshow fields. They can be overridden per-entry or in templates.'|t('slideshow-manager') }}</p>
+        <p class="light first">{{ 'These defaults will be used for all new slideshow fields. They can be overridden per-entry or in templates.'|t('slideshow-manager') }}</p>
 
     <hr>
 
@@ -229,8 +227,6 @@
         warning: settings.isOverriddenByConfig('defaultSwiperConfig.effect') ?
             'This is being overridden by the <code>defaultSwiperConfig.effect</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
     }) }}
-
-    </form>
 {% endblock %}
 
 {% js %}

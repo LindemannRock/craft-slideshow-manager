@@ -93,13 +93,11 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/styles') }}
-        {{ hiddenInput('section', 'styles') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/styles') }}
+    {{ hiddenInput('section', 'styles') }}
 
-        <p class="light" style="margin-top: 0;">
+        <p class="light first">
             {{ 'Set Swiper CSS variables used by `craft.slideshowManager.buildCssVars()`. Leave fields empty to use Swiper defaults.'|t('slideshow-manager') }}
         </p>
 
@@ -156,6 +154,4 @@
                 }) }}
             {% endfor %}
         {% endfor %}
-
-    </form>
 {% endblock %}

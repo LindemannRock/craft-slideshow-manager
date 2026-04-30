@@ -20,13 +20,11 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/layout') }}
-        {{ hiddenInput('section', 'layout') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/layout') }}
+    {{ hiddenInput('section', 'layout') }}
 
-        <h2 style="margin-top: 0;">{{ 'Slides Display'|t('slideshow-manager') }}</h2>
+        <h2 class="first">{{ 'Slides Display'|t('slideshow-manager') }}</h2>
 
     {{ forms.textField({
         label: 'Slides Per View'|t('slideshow-manager'),
@@ -356,6 +354,4 @@
     }
 })();
 {% endjs %}
-
-    </form>
 {% endblock %}

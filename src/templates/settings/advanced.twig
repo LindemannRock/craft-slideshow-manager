@@ -20,13 +20,11 @@
 ] %}
 
 {% block content %}
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('slideshow-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('slideshow-manager/settings/advanced') }}
-        {{ hiddenInput('section', 'advanced') }}
+    {{ actionInput('slideshow-manager/settings/save') }}
+    {{ redirectInput('slideshow-manager/settings/advanced') }}
+    {{ hiddenInput('section', 'advanced') }}
 
-        <h2 style="margin-top: 0;">{{ 'Free Mode'|t('slideshow-manager') }}</h2>
+        <h2 class="first">{{ 'Free Mode'|t('slideshow-manager') }}</h2>
 
     {{ forms.lightswitchField({
         label: 'Enable Free Mode'|t('slideshow-manager'),
@@ -177,6 +175,4 @@
         warning: settings.isOverriddenByConfig('defaultSwiperConfig.a11y.enabled') ?
             'This is being overridden by the <code>defaultSwiperConfig.a11y.enabled</code> setting in <code>config/slideshow-manager.php</code>.'|t('slideshow-manager')|raw : null,
     }) }}
-
-    </form>
 {% endblock %}
