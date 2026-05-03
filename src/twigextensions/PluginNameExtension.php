@@ -15,10 +15,13 @@ use Twig\Extension\GlobalsInterface;
 /**
  * Plugin Name Twig Extension
  *
- * @since 1.0.0
+ * @since 5.3.0
  */
 class PluginNameExtension extends AbstractExtension implements GlobalsInterface
 {
+    /**
+     * @inheritdoc
+     */
     public function getName(): string
     {
         return 'Slideshow Manager - Plugin Name Helper';
@@ -29,6 +32,11 @@ class PluginNameExtension extends AbstractExtension implements GlobalsInterface
     }
 }
 
+/**
+ * Plugin Name Helper
+ *
+ * @since 5.3.0
+ */
 class PluginNameHelper
 {
     public function getDisplayName(): string
