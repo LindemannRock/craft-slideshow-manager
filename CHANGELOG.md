@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.10.1](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.10.0...v5.10.1) (2026-05-06)
+
+
+### Bug Fixes
+
+* apply config overrides through shared settings helper ([ec31f6f](https://github.com/LindemannRock/craft-slideshow-manager/commit/ec31f6f7d6a38e46a2f4301593b8b13f34d9e1df))
+* drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([532a520](https://github.com/LindemannRock/craft-slideshow-manager/commit/532a520b577a9ea002c442c8188198066878fbbc))
+* read-only settings property and method ([32ce2c5](https://github.com/LindemannRock/craft-slideshow-manager/commit/32ce2c5004a9b70a54a5390f92fda2bca7f628b2))
+* **settings:** remove redundant save buttons from settings templates ([7599748](https://github.com/LindemannRock/craft-slideshow-manager/commit/759974840f987b54e8899fbaf4ca747b8bcf93cf))
+* update copyright year in plugin header ([1dbf02a](https://github.com/LindemannRock/craft-slideshow-manager/commit/1dbf02a2fbc665df2da4f25b3334de73b36e4b8f))
+
 ## [5.10.0](https://github.com/LindemannRock/craft-slideshow-manager/compare/v5.9.0...v5.10.0) (2026-03-04)
 
 
